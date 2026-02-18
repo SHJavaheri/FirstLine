@@ -1,0 +1,12 @@
+
+> frontend@0.1.0 dev
+> next dev --port 3010
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3010
+- Network:       http://192.168.2.42:3010
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 737ms
+[?25h

@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: firstline-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: firstline
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - firstline_pg_data:/var/lib/postgresql/data
+
+volumes:
+  firstline_pg_data:
