@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/backend/auth/current-user";
+import { getDashboardPathByRole } from "@/lib/role-navigation";
 import { AuthForm } from "@/components/auth/auth-form";
 
 export default async function LoginPage() {
   const user = await getCurrentUser();
   if (user) {
-    redirect("/lawyers");
+    redirect(getDashboardPathByRole(user.role));
   }
 
   return (

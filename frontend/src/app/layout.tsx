@@ -28,11 +28,18 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getCurrentUser();
+  const name = user ? [user.firstName, user.lastName].filter(Boolean).join(" ") : null;
 
   return (
     <html lang="en">
       <body className={`${fontSans.variable} ${fontDisplay.variable} antialiased`}>
-        <SiteHeader user={user} />
+        <SiteHeader
+          user={
+            user
+              ? { id: user.id, email: user.email, name: name || user.email, role: user.role }
+              : null
+          }
+        />
         <main>{children}</main>
       </body>
     </html>

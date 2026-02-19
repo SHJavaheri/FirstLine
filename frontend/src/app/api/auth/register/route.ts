@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     }
 
     const user = await registerUser(parsed.data);
-    const token = await createSessionToken({ sub: user.id, email: user.email });
+    const token = await createSessionToken({ sub: user.id, email: user.email, role: user.role });
     const sessionCookie = getSessionCookieConfig(token);
 
     const response = NextResponse.json({ user }, { status: 201 });

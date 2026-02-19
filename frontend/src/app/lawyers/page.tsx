@@ -1,5 +1,6 @@
 import { getAllSpecializations, searchLawyers } from "@/backend/services/lawyer-service";
 import { LawyerCard } from "@/components/lawyers/lawyer-card";
+import type { LawyerListItem } from "@/types";
 import { LawyerFilters } from "@/components/lawyers/lawyer-filters";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,7 @@ export default async function LawyersPage({
   searchParams: Promise<SearchParams>;
 }) {
   const params = await searchParams;
-  const [lawyers, specializations] = await Promise.all([
+  const [lawyers, specializations]: [LawyerListItem[], string[]] = await Promise.all([
     searchLawyers({
       q: params.q,
       specialization: params.specialization,
@@ -69,19 +70,7 @@ export default async function LawyersPage({
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {lawyers.map((lawyer) => (
-            <LawyerCard
-              key={lawyer.id}
-              lawyer={{
-                id: lawyer.id,
-                name: lawyer.name,
-                specialization: lawyer.specialization,
-                hourlyRate: lawyer.hourlyRate,
-                location: lawyer.location,
-                rating: lawyer.rating,
-                yearsExperience: lawyer.yearsExperience,
-                description: lawyer.description,
-              }}
-            />
+            <LawyerCard key={lawyer.id} lawyer={lawyer} />
           ))}
         </div>
       )}
