@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-import { findUserById } from "@/backend/repositories/user-repository";
+import { findAccountById } from "@/backend/repositories/user-repository";
 import { getClearSessionCookieConfig, SESSION_COOKIE_NAME, verifySessionToken } from "@/backend/auth/session";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +22,7 @@ export async function GET() {
     return response;
   }
 
-  const user = await findUserById(payload.sub);
+  const user = await findAccountById(payload.sub);
   if (!user) {
     const response = NextResponse.json({ user: null });
     response.cookies.set(clearCookie.name, clearCookie.value, clearCookie.options);

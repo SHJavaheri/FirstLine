@@ -7,38 +7,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String?
-  passwordHash String
-  lawyers      Lawyer[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+enum AccountRole {
+  CONSUMER
+  PROFESSIONAL
+  ADMIN
+}
+
+model Account {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  passwordHash    String
+  role            AccountRole @default(CONSUMER)
+  firstName       String?
+  lastName        String?
+  profilePhotoUrl String?
+  jobTitle        String?
+  bio             String?
+  locationCity    String?
+  locationState   String?
+  phone           String?
+  isSuspended     Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  professional    ProfessionalProfile?
 
   @@index([createdAt])
 }
 
-model Lawyer {
-  id              String   @id @default(cuid())
-  userId          String?
-  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  name            String
-  specialization  String
-  hourlyRate      Int
-  location        String
-  rating          Float
-  yearsExperience Int
-  description     String
-  email           String?
-  phone           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+model ProfessionalProfile {
+  id                    String   @id @default(cuid())
+  accountId             String   @unique
+  account               Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  profession            String
+  specializations       String[]
+  hourlyRate            Int?
+  yearsExperience       Int?
+  location              String?
+  firmName              String?
+  firmAddress           String?
+  firmWebsite           String?
+  yearsAtCurrentFirm    Int?
+  totalExperienceYears  Int?
+  licenseNumber         String?
+  licensingBody         String?
+  licenseJurisdiction   String?
+  pricingModel          String?
+  pricingDetails        String?
+  minRate               Int?
+  maxRate               Int?
+  acceptsNewClients     Boolean  @default(true)
+  offersInPerson        Boolean  @default(true)
+  offersRemote          Boolean  @default(true)
+  verified              Boolean  @default(false)
+  rating                Float    @default(0)
+  description           String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
-  @@index([name])
-  @@index([specialization])
-  @@index([location])
-  @@index([hourlyRate])
-  @@index([rating])
-  @@index([specialization, location])
+  @@index([profession])
+  @@index([verified])
 }

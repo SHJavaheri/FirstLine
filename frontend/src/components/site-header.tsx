@@ -3,12 +3,14 @@ import { Scale } from "lucide-react";
 
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Button } from "@/components/ui/button";
+import type { AccountRole } from "@/types";
 
 type SiteHeaderProps = {
   user: {
     id: string;
     email: string;
     name: string | null;
+    role: AccountRole;
   } | null;
 };
 
@@ -23,10 +25,24 @@ export function SiteHeader({ user }: SiteHeaderProps) {
           <span className="text-lg font-semibold tracking-tight">FirstLine</span>
         </Link>
 
-        <nav className="flex items-center gap-2">
+        <nav className="flex flex-wrap items-center gap-2">
           <Button asChild variant="ghost" size="sm">
-            <Link href="/lawyers">Find Lawyers</Link>
+            <Link href="/lawyers">Explore</Link>
           </Button>
+
+          {user?.role === "ADMIN" ? (
+            <>
+              <Button asChild size="sm">
+                <Link href="/consumer/dashboard">Consumer Dashboard</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/professional/dashboard">Professional Dashboard</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/admin/dashboard">Admin Panel</Link>
+              </Button>
+            </>
+          ) : null}
 
           {user ? (
             <>
