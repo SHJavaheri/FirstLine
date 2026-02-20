@@ -31,6 +31,8 @@ model Account {
   updatedAt       DateTime @updatedAt
 
   professional    ProfessionalProfile?
+  favorites       FavoriteProfessional[]
+  ratings         Rating[]
 
   @@index([createdAt])
 }
@@ -62,9 +64,45 @@ model ProfessionalProfile {
   verified              Boolean  @default(false)
   rating                Float    @default(0)
   description           String?
+  education             String?
+  certifications        String?
+  professionalBio       String?
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
+  favoritedBy           FavoriteProfessional[]
+  ratings               Rating[]
+
   @@index([profession])
   @@index([verified])
+}
+
+model FavoriteProfessional {
+  id                      String   @id @default(cuid())
+  consumerId              String
+  professionalProfileId   String
+  createdAt               DateTime @default(now())
+
+  consumer                Account              @relation(fields: [consumerId], references: [id], onDelete: Cascade)
+  professionalProfile     ProfessionalProfile  @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([consumerId, professionalProfileId])
+  @@index([consumerId])
+}
+
+model Rating {
+  id                      String   @id @default(cuid())
+  consumerId              String
+  professionalProfileId   String
+  rating                  Int
+  comment                 String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  consumer                Account              @relation(fields: [consumerId], references: [id], onDelete: Cascade)
+  professionalProfile     ProfessionalProfile  @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([consumerId, professionalProfileId])
+  @@index([professionalProfileId])
+  @@index([consumerId])
 }

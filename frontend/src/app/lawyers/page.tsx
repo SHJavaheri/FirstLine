@@ -1,4 +1,5 @@
 import { getAllSpecializations, searchLawyers } from "@/backend/services/lawyer-service";
+import { getCurrentUser } from "@/backend/auth/current-user";
 import { LawyerCard } from "@/components/lawyers/lawyer-card";
 import type { LawyerListItem } from "@/types";
 import { LawyerFilters } from "@/components/lawyers/lawyer-filters";
@@ -28,7 +29,7 @@ export default async function LawyersPage({
   searchParams: Promise<SearchParams>;
 }) {
   const params = await searchParams;
-  const [lawyers, specializations]: [LawyerListItem[], string[]] = await Promise.all([
+  const [lawyers, specializations, user]: [LawyerListItem[], string[], Awaited<ReturnType<typeof getCurrentUser>>] = await Promise.all([
     searchLawyers({
       q: params.q,
       specialization: params.specialization,
@@ -38,6 +39,7 @@ export default async function LawyersPage({
       minRating: parseNumber(params.minRating),
     }),
     getAllSpecializations(),
+    getCurrentUser(),
   ]);
 
   const initialFilters = {
@@ -70,7 +72,7 @@ export default async function LawyersPage({
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {lawyers.map((lawyer) => (
-            <LawyerCard key={lawyer.id} lawyer={lawyer} />
+            <LawyerCard key={lawyer.id} lawyer={lawyer} showFavoriteButton={user?.role === "CONSUMER"} />
           ))}
         </div>
       )}

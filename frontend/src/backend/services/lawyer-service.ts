@@ -40,6 +40,7 @@ function mapProfessionalProfile(
     hourlyRate: profile.hourlyRate ?? null,
     minRate: profile.minRate ?? null,
     maxRate: profile.maxRate ?? null,
+    pricingModel: profile.pricingModel ?? null,
     location,
     rating: profile.rating,
     yearsExperience: profile.yearsExperience ?? profile.totalExperienceYears ?? null,

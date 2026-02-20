@@ -44,6 +44,8 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [registerRole, setRegisterRole] = useState<RegisterRole>("CONSUMER");
+  const [affiliationType, setAffiliationType] = useState<string>("INDEPENDENT");
+  const [pricingModel, setPricingModel] = useState<string>("HOURLY");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -224,39 +226,49 @@ export function AuthForm({ mode }: AuthFormProps) {
                       id="affiliationType"
                       name="affiliationType"
                       className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                      defaultValue="INDEPENDENT"
+                      value={affiliationType}
+                      onChange={(e) => setAffiliationType(e.target.value)}
                     >
                       <option value="INDEPENDENT">Independent</option>
                       <option value="FIRM">Affiliated with a Firm</option>
                     </select>
                   </div>
 
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="firmName">Firm Name</Label>
-                      <Input id="firmName" name="firmName" placeholder="Acme Legal LLP" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="firmWebsite">Firm Website</Label>
-                      <Input id="firmWebsite" name="firmWebsite" placeholder="https://firm.com" />
-                    </div>
-                  </div>
+                  {affiliationType === "FIRM" ? (
+                    <>
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="firmName">Firm Name</Label>
+                          <Input id="firmName" name="firmName" placeholder="Acme Legal LLP" required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="firmWebsite">Firm Website</Label>
+                          <Input id="firmWebsite" name="firmWebsite" placeholder="https://firm.com" />
+                        </div>
+                      </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="firmAddress">Firm Address (Optional)</Label>
-                    <Input id="firmAddress" name="firmAddress" placeholder="123 Market St" />
-                  </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="firmAddress">Firm Address (Optional)</Label>
+                        <Input id="firmAddress" name="firmAddress" placeholder="123 Market St" />
+                      </div>
 
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="yearsAtCurrentFirm">Years at Current Firm</Label>
-                      <Input id="yearsAtCurrentFirm" name="yearsAtCurrentFirm" type="number" min={0} />
-                    </div>
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="yearsAtCurrentFirm">Years at Current Firm</Label>
+                          <Input id="yearsAtCurrentFirm" name="yearsAtCurrentFirm" type="number" min={0} required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="totalExperienceYears">Total Years of Experience</Label>
+                          <Input id="totalExperienceYears" name="totalExperienceYears" type="number" min={0} required />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
                     <div className="space-y-2">
                       <Label htmlFor="totalExperienceYears">Total Years of Experience</Label>
                       <Input id="totalExperienceYears" name="totalExperienceYears" type="number" min={0} required />
                     </div>
-                  </div>
+                  )}
 
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
@@ -303,7 +315,8 @@ export function AuthForm({ mode }: AuthFormProps) {
                         id="pricingModel"
                         name="pricingModel"
                         className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                        defaultValue="HOURLY"
+                        value={pricingModel}
+                        onChange={(e) => setPricingModel(e.target.value)}
                       >
                         <option value="HOURLY">Hourly Rate</option>
                         <option value="FIXED">Fixed Fee</option>
@@ -317,20 +330,33 @@ export function AuthForm({ mode }: AuthFormProps) {
                     </div>
                   </div>
 
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <div className="space-y-2">
-                      <Label htmlFor="hourlyRate">Hourly Rate</Label>
-                      <Input id="hourlyRate" name="hourlyRate" type="number" min={0} />
+                  {pricingModel === "HOURLY" ? (
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="hourlyRate">Hourly Rate</Label>
+                        <Input id="hourlyRate" name="hourlyRate" type="number" min={0} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="minRate">Min Rate</Label>
+                        <Input id="minRate" name="minRate" type="number" min={0} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="maxRate">Max Rate</Label>
+                        <Input id="maxRate" name="maxRate" type="number" min={0} />
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="minRate">Min Rate</Label>
-                      <Input id="minRate" name="minRate" type="number" min={0} />
+                  ) : pricingModel === "FIXED" ? (
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="minRate">Min Fixed Fee</Label>
+                        <Input id="minRate" name="minRate" type="number" min={0} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="maxRate">Max Fixed Fee</Label>
+                        <Input id="maxRate" name="maxRate" type="number" min={0} />
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="maxRate">Max Rate</Label>
-                      <Input id="maxRate" name="maxRate" type="number" min={0} />
-                    </div>
-                  </div>
+                  ) : null}
 
                   <div className="grid gap-2 text-sm text-slate-700">
                     <label className="inline-flex items-center gap-2">

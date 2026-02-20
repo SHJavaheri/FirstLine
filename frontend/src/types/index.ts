@@ -38,6 +38,7 @@ export type LawyerListItem = {
   description?: string | null;
   verified: boolean;
   acceptsNewClients: boolean;
+  pricingModel?: string | null;
   email?: string | null;
   phone?: string | null;
 };

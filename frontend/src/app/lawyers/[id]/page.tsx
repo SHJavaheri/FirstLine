@@ -2,8 +2,12 @@ import { notFound } from "next/navigation";
 import { Mail, MapPin, Phone, Star, Wallet } from "lucide-react";
 
 import { getLawyerProfile } from "@/backend/services/lawyer-service";
+import { getCurrentUser } from "@/backend/auth/current-user";
+import { getRating, getProfessionalRatings } from "@/backend/repositories/rating-repository";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { RatingDialog } from "@/components/ratings/rating-dialog";
+import { RatingsList } from "@/components/ratings/ratings-list";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +22,11 @@ export default async function LawyerProfilePage({
   if (!lawyer) {
     notFound();
   }
+
+  const user = await getCurrentUser();
+  const isConsumer = user?.role === "CONSUMER";
+  const userRating = isConsumer ? await getRating(user.id, lawyer.accountId) : null;
+  const allRatings = await getProfessionalRatings(lawyer.accountId);
 
   return (
     <section className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
@@ -63,6 +72,28 @@ export default async function LawyerProfilePage({
             <h2 className="text-xl font-semibold text-slate-900">Profile Summary</h2>
             <p className="leading-7 text-slate-700">{lawyer.description}</p>
           </div>
+
+          {isConsumer && (
+            <div className="border-t pt-4">
+              <RatingDialog
+                professionalAccountId={lawyer.accountId}
+                professionalName={lawyer.name}
+                existingRating={userRating?.rating}
+                existingComment={userRating?.comment || undefined}
+              />
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <h2 className="text-2xl font-semibold text-slate-900">
+            Ratings & Reviews ({allRatings.length})
+          </h2>
+        </CardHeader>
+        <CardContent>
+          <RatingsList ratings={allRatings} />
         </CardContent>
       </Card>
     </section>

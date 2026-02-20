@@ -46,9 +46,11 @@ export function SiteHeader({ user }: SiteHeaderProps) {
 
           {user ? (
             <>
-              <span className="hidden text-sm text-slate-600 md:block">
-                {user.name ? user.name : user.email}
-              </span>
+              <Button asChild variant="ghost" size="sm" className="hidden md:flex">
+                <Link href="/profile">
+                  {user.name ? user.name : user.email}
+                </Link>
+              </Button>
               <LogoutButton />
             </>
           ) : (
