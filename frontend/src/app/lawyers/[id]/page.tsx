@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { RatingDialog } from "@/components/ratings/rating-dialog";
 import { RatingsList } from "@/components/ratings/ratings-list";
+import { RecommendButton } from "@/components/recommendations/recommend-button";
 
 export const dynamic = "force-dynamic";
 
@@ -75,12 +76,22 @@ export default async function LawyerProfilePage({
 
           {isConsumer && (
             <div className="border-t pt-4">
-              <RatingDialog
-                professionalAccountId={lawyer.accountId}
-                professionalName={lawyer.name}
-                existingRating={userRating?.rating}
-                existingComment={userRating?.comment || undefined}
-              />
+              <div className="flex items-center gap-4">
+                <RatingDialog
+                  professionalAccountId={lawyer.accountId}
+                  professionalName={lawyer.name}
+                  existingRating={userRating?.rating}
+                  existingComment={userRating?.comment || undefined}
+                />
+                <div className="flex items-center gap-2">
+                  <RecommendButton
+                    professionalAccountId={lawyer.accountId}
+                    professionalName={lawyer.name}
+                    profession={lawyer.specialization}
+                  />
+                  <span className="text-sm text-slate-600">Recommend</span>
+                </div>
+              </div>
             </div>
           )}
         </CardContent>

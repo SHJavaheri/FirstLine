@@ -1,19 +1,28 @@
 import Link from "next/link";
-import { MapPin, Star, Wallet } from "lucide-react";
+import { MapPin, Star, Wallet, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FavoriteButton } from "@/components/lawyers/favorite-button";
-import type { LawyerListItem } from "@/types";
+import { RecommendButton } from "@/components/recommendations/recommend-button";
+import type { LawyerListItem, LawyerWithTrust } from "@/types";
 
 type LawyerCardProps = {
-  lawyer: LawyerListItem;
+  lawyer: LawyerListItem | LawyerWithTrust;
   showFavoriteButton?: boolean;
   initialIsFavorite?: boolean;
+  showRecommendButton?: boolean;
+  initialIsRecommended?: boolean;
 };
 
-export function LawyerCard({ lawyer, showFavoriteButton = false, initialIsFavorite }: LawyerCardProps) {
+export function LawyerCard({ 
+  lawyer, 
+  showFavoriteButton = false, 
+  initialIsFavorite,
+  showRecommendButton = false,
+  initialIsRecommended,
+}: LawyerCardProps) {
   const formatCurrency = (value?: number | null) =>
     value != null ? `$${value.toLocaleString()}` : null;
 
@@ -36,19 +45,44 @@ export function LawyerCard({ lawyer, showFavoriteButton = false, initialIsFavori
     return min ? `${min}/hr` : "Hourly rate not provided";
   };
 
+  const lawyerWithTrust = lawyer as LawyerWithTrust;
+  const hasRecommendations = lawyerWithTrust.recommendedByFriends && lawyerWithTrust.recommendedByFriends.count > 0;
+  const hasFavorites = lawyerWithTrust.favoritedByFriends && lawyerWithTrust.favoritedByFriends.count > 0;
+  const totalFriendEndorsements = (lawyerWithTrust.recommendedByFriends?.count || 0) + (lawyerWithTrust.favoritedByFriends?.count || 0);
+
   return (
     <Card className="h-full">
       <CardHeader className="space-y-3">
+        {totalFriendEndorsements > 0 && (
+          <div className="rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
+            <div className="flex items-center gap-2 text-sm text-blue-900">
+              <Users className="h-4 w-4" />
+              <span className="font-medium">
+                Recommended by {totalFriendEndorsements} friend{totalFriendEndorsements !== 1 ? 's' : ''} you follow
+              </span>
+            </div>
+          </div>
+        )}
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1">
             <div className="flex items-start justify-between gap-2">
               <CardTitle className="text-lg">{lawyer.name}</CardTitle>
-              {showFavoriteButton && (
-                <FavoriteButton
-                  professionalAccountId={lawyer.accountId}
-                  initialIsFavorite={initialIsFavorite}
-                />
-              )}
+              <div className="flex gap-1">
+                {showRecommendButton && (
+                  <RecommendButton
+                    professionalAccountId={lawyer.accountId}
+                    professionalName={lawyer.name}
+                    profession={lawyer.profession}
+                    initialIsRecommended={initialIsRecommended}
+                  />
+                )}
+                {showFavoriteButton && (
+                  <FavoriteButton
+                    professionalAccountId={lawyer.accountId}
+                    initialIsFavorite={initialIsFavorite}
+                  />
+                )}
+              </div>
             </div>
             <div className="mt-2 flex flex-wrap gap-1">
               {lawyer.specializations.map((spec, index) => (

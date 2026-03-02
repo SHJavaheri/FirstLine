@@ -1,6 +1,7 @@
 import {
   getProfessionalProfileById,
   listProfessionalProfiles,
+  listProfessionalProfilesWithTrust,
   listSpecializations,
 } from "@/backend/repositories/lawyer-repository";
 import type { LawyerSearchFilters, LawyerListItem } from "@/types";
@@ -8,6 +9,18 @@ import type { LawyerSearchFilters, LawyerListItem } from "@/types";
 export async function searchLawyers(filters: LawyerSearchFilters) {
   const profiles = await listProfessionalProfiles(filters);
   return profiles.map(mapProfessionalProfile);
+}
+
+export async function searchLawyersWithTrust(
+  filters: LawyerSearchFilters,
+  userId?: string,
+  sortBy: "rating" | "friendTrust" | "price" = "rating"
+) {
+  const profiles = await listProfessionalProfilesWithTrust(filters, userId, sortBy);
+  return profiles.map((p) => ({
+    ...mapProfessionalProfile(p),
+    friendTrustData: p.friendTrustData,
+  }));
 }
 
 export async function getLawyerProfile(id: string) {
