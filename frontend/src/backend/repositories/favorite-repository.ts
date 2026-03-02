@@ -54,7 +54,18 @@ export async function getFavorites(consumerAccountId: string) {
     include: {
       professionalProfile: {
         include: {
-          account: true,
+          account: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              phone: true,
+              locationCity: true,
+              locationState: true,
+              profilePhotoUrl: true,
+            },
+          },
         },
       },
     },

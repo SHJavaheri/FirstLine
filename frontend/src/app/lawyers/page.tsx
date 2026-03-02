@@ -29,17 +29,22 @@ export default async function LawyersPage({
   searchParams: Promise<SearchParams>;
 }) {
   const params = await searchParams;
-  const [lawyers, specializations, user]: [LawyerListItem[], string[], Awaited<ReturnType<typeof getCurrentUser>>] = await Promise.all([
-    searchLawyers({
-      q: params.q,
-      specialization: params.specialization,
-      location: params.location,
-      minRate: parseNumber(params.minRate),
-      maxRate: parseNumber(params.maxRate),
-      minRating: parseNumber(params.minRating),
-    }),
+  const user = await getCurrentUser();
+  
+  const searchFilters = {
+    q: params.q,
+    specialization: params.specialization,
+    location: params.location,
+    minRate: parseNumber(params.minRate),
+    maxRate: parseNumber(params.maxRate),
+    minRating: parseNumber(params.minRating),
+  };
+
+  const [lawyers, specializations] = await Promise.all([
+    user?.role === "CONSUMER" 
+      ? (await import("@/backend/services/lawyer-service")).searchLawyersWithTrust(searchFilters, user.id, "friendTrust")
+      : searchLawyers(searchFilters),
     getAllSpecializations(),
-    getCurrentUser(),
   ]);
 
   const initialFilters = {

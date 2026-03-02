@@ -1,13 +1,15 @@
 import { redirect } from "next/navigation";
-import { User, MapPin, Briefcase, Mail, Phone, Star } from "lucide-react";
+import { User, MapPin, Briefcase, Mail, Phone, Star, Users } from "lucide-react";
 
 import { getCurrentUser } from "@/backend/auth/current-user";
 import { getFavorites } from "@/backend/repositories/favorite-repository";
+import { getConsumerProfile } from "@/backend/repositories/consumer-repository";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LawyerCard } from "@/components/lawyers/lawyer-card";
 import { EditProfileDialog } from "@/components/profile/edit-profile-dialog";
+import { ConnectionsStats } from "@/components/friends/connections-stats";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +20,10 @@ export default async function ProfilePage() {
     redirect("/auth/login");
   }
 
-  const favorites = user.role === "CONSUMER" ? await getFavorites(user.id) : [];
+  const [favorites, consumerProfile] =
+    user.role === "CONSUMER"
+      ? await Promise.all([getFavorites(user.id), getConsumerProfile(user.id, user.id)])
+      : [[], null];
 
   const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ") || "Anonymous User";
   const location = [user.locationCity, user.locationState].filter(Boolean).join(", ");
@@ -57,6 +62,15 @@ export default async function ProfilePage() {
                     <MapPin className="h-4 w-4" />
                     <span>{location}</span>
                   </div>
+                )}
+
+                {consumerProfile && (
+                  <ConnectionsStats
+                    accountId={consumerProfile.id}
+                    followingCount={consumerProfile.followingCount}
+                    followersCount={consumerProfile.followersCount}
+                    ratingsCount={consumerProfile.ratingsCount}
+                  />
                 )}
               </div>
 

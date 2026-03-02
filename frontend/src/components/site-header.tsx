@@ -3,6 +3,7 @@ import { Scale } from "lucide-react";
 
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Button } from "@/components/ui/button";
+import { FriendNotifications } from "@/components/friends/friend-notifications";
 import type { AccountRole } from "@/types";
 
 type SiteHeaderProps = {
@@ -30,6 +31,12 @@ export function SiteHeader({ user }: SiteHeaderProps) {
             <Link href="/lawyers">Explore</Link>
           </Button>
 
+          {user?.role === "CONSUMER" && (
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/discover-friends">Friends</Link>
+            </Button>
+          )}
+
           {user?.role === "ADMIN" ? (
             <>
               <Button asChild size="sm">
@@ -46,6 +53,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
 
           {user ? (
             <>
+              {user.role === "CONSUMER" && <FriendNotifications />}
               <Button asChild variant="ghost" size="sm" className="hidden md:flex">
                 <Link href="/profile">
                   {user.name ? user.name : user.email}

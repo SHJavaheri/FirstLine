@@ -13,6 +13,19 @@ enum AccountRole {
   ADMIN
 }
 
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+}
+
+enum ProfileVisibility {
+  PUBLIC
+  FRIENDS_ONLY
+  PRIVATE
+}
+
 model Account {
   id              String   @id @default(cuid())
   email           String   @unique
@@ -33,6 +46,16 @@ model Account {
   professional    ProfessionalProfile?
   favorites       FavoriteProfessional[]
   ratings         Rating[]
+  
+  sentFriendRequests      FriendRequest[]  @relation("SentFriendRequests")
+  receivedFriendRequests  FriendRequest[]  @relation("ReceivedFriendRequests")
+  friendships             Friendship[]     @relation("UserFriendships")
+  friendOf                Friendship[]     @relation("FriendFriendships")
+  friendRequestRateLimit  FriendRequestRateLimit?
+  
+  allowFriendRequests     Boolean  @default(true)
+  profileVisibility       ProfileVisibility @default(PUBLIC)
+  personalRecommendations PersonalRecommendation[]
 
   @@index([createdAt])
 }
@@ -72,6 +95,7 @@ model ProfessionalProfile {
 
   favoritedBy           FavoriteProfessional[]
   ratings               Rating[]
+  personalRecommendations PersonalRecommendation[]
 
   @@index([profession])
   @@index([verified])
@@ -105,4 +129,70 @@ model Rating {
   @@unique([consumerId, professionalProfileId])
   @@index([professionalProfileId])
   @@index([consumerId])
+}
+
+model FriendRequest {
+  id          String   @id @default(cuid())
+  senderId    String
+  receiverId  String
+  status      FriendRequestStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sender      Account  @relation("SentFriendRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    Account  @relation("ReceivedFriendRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([receiverId, status])
+  @@index([senderId])
+  @@index([createdAt])
+}
+
+model Friendship {
+  id          String   @id @default(cuid())
+  userId      String
+  friendId    String
+  createdAt   DateTime @default(now())
+
+  user        Account  @relation("UserFriendships", fields: [userId], references: [id], onDelete: Cascade)
+  friend      Account  @relation("FriendFriendships", fields: [friendId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, friendId])
+  @@index([userId])
+  @@index([friendId])
+  @@index([createdAt])
+}
+
+model FriendRequestRateLimit {
+  id              String   @id @default(cuid())
+  accountId       String   @unique
+  requestCount    Int      @default(0)
+  windowStart     DateTime @default(now())
+  
+  account         Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([windowStart])
+}
+
+model PersonalRecommendation {
+  id                      String   @id @default(cuid())
+  consumerId              String
+  professionalProfileId   String
+  category                String
+  specialty               String?
+  note                    String?
+  isFavorite              Boolean  @default(false)
+  visibility              ProfileVisibility @default(PUBLIC)
+  selectedTags            String[] @default([])
+  wouldUseAgain           String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  consumer                Account              @relation(fields: [consumerId], references: [id], onDelete: Cascade)
+  professionalProfile     ProfessionalProfile  @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([consumerId, professionalProfileId])
+  @@index([consumerId])
+  @@index([professionalProfileId])
+  @@index([category])
 }
