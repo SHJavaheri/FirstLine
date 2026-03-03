@@ -110,7 +110,7 @@ function RatingsTab({ ratings }: { ratings: ConsumerRating[] }) {
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <Link
-                href={`/lawyers/${rating.professional.accountId}`}
+                href={`/lawyers/${rating.professional.id}`}
                 className="text-lg font-semibold text-slate-900 hover:text-blue-600"
               >
                 {rating.professional.name}
@@ -195,7 +195,7 @@ function RecommendationCard({ recommendation }: { recommendation: PersonalRecomm
   return (
     <div className="rounded-lg border border-slate-200 p-4 hover:border-blue-300 hover:shadow-md transition-all">
       <Link
-        href={`/lawyers/${recommendation.professional.accountId}`}
+        href={`/lawyers/${recommendation.professional.id}`}
         className="block"
       >
         <div className="flex items-start gap-3">
