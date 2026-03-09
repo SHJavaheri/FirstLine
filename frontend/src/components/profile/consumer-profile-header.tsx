@@ -73,7 +73,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
 
   if (!profile.canViewDetails) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-sm">
         <div className="flex items-center gap-6">
           <div className="flex-shrink-0">
             {profile.profilePhotoUrl ? (
@@ -83,13 +83,13 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
                 className="h-24 w-24 rounded-full object-cover"
               />
             ) : (
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-200">
-                <User className="h-12 w-12 text-slate-500" />
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
+                <User className="h-12 w-12 text-slate-500 dark:text-slate-400" />
               </div>
             )}
           </div>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-slate-900">{displayName}</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{displayName}</h1>
             {profile.isSelf && (
               <ConnectionsStats
                 accountId={profile.id}
@@ -98,7 +98,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
                 ratingsCount={profile.ratingsCount}
               />
             )}
-            <div className="mt-4 flex items-center gap-2 text-slate-600">
+            <div className="mt-4 flex items-center gap-2 text-slate-600 dark:text-slate-400">
               <Lock className="h-5 w-5" />
               <p className="text-sm">This profile is private</p>
             </div>
@@ -118,7 +118,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-sm">
       <div className="flex items-start gap-6">
         <div className="flex-shrink-0">
           {profile.profilePhotoUrl ? (
@@ -128,8 +128,8 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
               className="h-24 w-24 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-200">
-              <User className="h-12 w-12 text-slate-500" />
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
+              <User className="h-12 w-12 text-slate-500 dark:text-slate-400" />
             </div>
           )}
         </div>
@@ -137,17 +137,17 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <h1 className="text-3xl font-bold text-slate-900">{displayName}</h1>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{displayName}</h1>
               
               {profile.jobTitle && (
-                <div className="mt-2 flex items-center gap-2 text-slate-600">
+                <div className="mt-2 flex items-center gap-2 text-slate-600 dark:text-slate-400">
                   <Briefcase className="h-5 w-5" />
                   <span>{profile.jobTitle}</span>
                 </div>
               )}
 
               {location && (
-                <div className="mt-1 flex items-center gap-2 text-slate-600">
+                <div className="mt-1 flex items-center gap-2 text-slate-600 dark:text-slate-400">
                   <MapPin className="h-5 w-5" />
                   <span>{location}</span>
                 </div>
@@ -167,7 +167,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
                   <button
                     onClick={handleUnfriend}
                     disabled={isLoading}
-                    className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                    className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50"
                   >
                     {isLoading ? "Removing..." : "Unfriend"}
                   </button>
@@ -175,7 +175,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
                   <button
                     onClick={handleCancelRequest}
                     disabled={isLoading}
-                    className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                    className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50"
                   >
                     {isLoading ? "Canceling..." : "Cancel Request"}
                   </button>
@@ -200,7 +200,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
           </div>
 
           {profile.bio && (
-            <p className="mt-4 text-slate-700">{profile.bio}</p>
+            <p className="mt-4 text-slate-700 dark:text-slate-300">{profile.bio}</p>
           )}
         </div>
       </div>

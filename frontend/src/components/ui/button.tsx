@@ -9,12 +9,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-slate-900 text-white hover:bg-slate-700 focus-visible:ring-slate-500",
+        default: "bg-slate-900 text-white hover:bg-slate-700 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200",
+        gradient: "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 focus-visible:ring-cyan-500 dark:shadow-cyan-500/20 dark:hover:shadow-cyan-500/30",
         outline:
-          "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100 focus-visible:ring-slate-400",
+          "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100 focus-visible:ring-slate-400 dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-100 dark:hover:bg-slate-700/50",
         secondary:
-          "bg-slate-100 text-slate-900 hover:bg-slate-200 focus-visible:ring-slate-400",
-        ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-slate-400",
+          "bg-slate-100 text-slate-900 hover:bg-slate-200 focus-visible:ring-slate-400 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700",
+        ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-slate-400 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100",
       },
       size: {
         default: "h-10 px-4 py-2",
