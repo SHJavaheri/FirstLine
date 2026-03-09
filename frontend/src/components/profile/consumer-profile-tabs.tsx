@@ -46,15 +46,15 @@ export function ConsumerProfileTabs({ accountId, profile }: ConsumerProfileTabsP
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
-      <div className="border-b border-slate-200">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
+      <div className="border-b border-slate-200 dark:border-slate-700">
         <nav className="flex gap-8 px-6" aria-label="Tabs">
           <button
             onClick={() => setActiveTab("ratings")}
             className={`border-b-2 py-4 text-sm font-medium transition-colors ${
               activeTab === "ratings"
                 ? "border-blue-600 text-blue-600"
-                : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export function ConsumerProfileTabs({ accountId, profile }: ConsumerProfileTabsP
             className={`border-b-2 py-4 text-sm font-medium transition-colors ${
               activeTab === "recommendations"
                 ? "border-blue-600 text-blue-600"
-                : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -96,8 +96,8 @@ export function ConsumerProfileTabs({ accountId, profile }: ConsumerProfileTabsP
 function RatingsTab({ ratings }: { ratings: ConsumerRating[] }) {
   if (ratings.length === 0) {
     return (
-      <div className="py-12 text-center text-slate-600">
-        <Star className="mx-auto h-12 w-12 text-slate-400" />
+      <div className="py-12 text-center text-slate-600 dark:text-slate-400">
+        <Star className="mx-auto h-12 w-12 text-slate-400 dark:text-slate-600" />
         <p className="mt-4">No reviews yet</p>
       </div>
     );
@@ -106,16 +106,16 @@ function RatingsTab({ ratings }: { ratings: ConsumerRating[] }) {
   return (
     <div className="space-y-4">
       {ratings.map((rating) => (
-        <div key={rating.id} className="rounded-lg border border-slate-200 p-4">
+        <div key={rating.id} className="rounded-lg border border-slate-200 dark:border-slate-700 p-4">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <Link
                 href={`/lawyers/${rating.professional.id}`}
-                className="text-lg font-semibold text-slate-900 hover:text-blue-600"
+                className="text-lg font-semibold text-slate-900 dark:text-white hover:text-blue-600"
               >
                 {rating.professional.name}
               </Link>
-              <div className="mt-1 flex items-center gap-2 text-sm text-slate-600">
+              <div className="mt-1 flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                 <Briefcase className="h-4 w-4" />
                 <span>{rating.professional.profession}</span>
                 {rating.professional.specializations.length > 0 && (
@@ -131,24 +131,24 @@ function RatingsTab({ ratings }: { ratings: ConsumerRating[] }) {
                 <Star
                   key={i}
                   className={`h-5 w-5 ${
-                    i < rating.rating ? "fill-yellow-400 text-yellow-400" : "text-slate-300"
+                    i < rating.rating ? "fill-yellow-400 text-yellow-400" : "text-slate-300 dark:text-slate-600"
                   }`}
                 />
               ))}
             </div>
           </div>
           {rating.comment && (
-            <p className="mt-3 text-slate-700">{rating.comment}</p>
+            <p className="mt-3 text-slate-700 dark:text-slate-300">{rating.comment}</p>
           )}
           {rating.professionalReply && (
-            <div className="mt-3 rounded-lg bg-slate-50 p-3">
-              <p className="text-xs font-semibold text-slate-600 mb-1">
+            <div className="mt-3 rounded-lg bg-slate-50 dark:bg-slate-700 p-3">
+              <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                 Professional Response
               </p>
-              <p className="text-sm text-slate-700">{rating.professionalReply}</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300">{rating.professionalReply}</p>
             </div>
           )}
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
             {new Date(rating.createdAt).toLocaleDateString()}
           </p>
         </div>
@@ -160,8 +160,8 @@ function RatingsTab({ ratings }: { ratings: ConsumerRating[] }) {
 function RecommendationsTab({ recommendations }: { recommendations: PersonalRecommendation[] }) {
   if (recommendations.length === 0) {
     return (
-      <div className="py-12 text-center text-slate-600">
-        <Award className="mx-auto h-12 w-12 text-slate-400" />
+      <div className="py-12 text-center text-slate-600 dark:text-slate-400">
+        <Award className="mx-auto h-12 w-12 text-slate-400 dark:text-slate-600" />
         <p className="mt-4">No recommendations yet</p>
       </div>
     );
@@ -174,7 +174,7 @@ function RecommendationsTab({ recommendations }: { recommendations: PersonalReco
     <div className="space-y-6">
       {favorites.length > 0 && (
         <div>
-          <h3 className="mb-4 text-lg font-semibold text-slate-900">⭐ Top Recommendations</h3>
+          <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">⭐ Top Recommendations</h3>
           <div className="grid gap-4 md:grid-cols-2">
             {favorites.map((rec) => (
               <RecommendationCard key={rec.id} recommendation={rec} />
@@ -186,7 +186,7 @@ function RecommendationsTab({ recommendations }: { recommendations: PersonalReco
       {others.length > 0 && (
         <div>
           {favorites.length > 0 && (
-            <h3 className="mb-4 text-lg font-semibold text-slate-900">Other Recommendations</h3>
+            <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Other Recommendations</h3>
           )}
           <div className="grid gap-4 md:grid-cols-2">
             {others.map((rec) => (
@@ -201,7 +201,7 @@ function RecommendationsTab({ recommendations }: { recommendations: PersonalReco
 
 function RecommendationCard({ recommendation }: { recommendation: PersonalRecommendation }) {
   return (
-    <div className="rounded-lg border border-slate-200 p-4 hover:border-blue-300 hover:shadow-md transition-all">
+    <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md transition-all">
       <Link
         href={`/lawyers/${recommendation.professional.id}`}
         className="block"
@@ -215,10 +215,10 @@ function RecommendationCard({ recommendation }: { recommendation: PersonalRecomm
             />
           )}
           <div className="flex-1 min-w-0">
-            <h4 className="font-semibold text-slate-900 hover:text-blue-600">
+            <h4 className="font-semibold text-slate-900 dark:text-white hover:text-blue-600">
               {recommendation.professional.name}
             </h4>
-            <div className="mt-1 flex items-center gap-2 text-sm text-slate-600">
+            <div className="mt-1 flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
               <span>{recommendation.category}</span>
               {recommendation.specialty && (
                 <>
@@ -234,11 +234,11 @@ function RecommendationCard({ recommendation }: { recommendation: PersonalRecomm
                   className={`h-3.5 w-3.5 ${
                     i < recommendation.professional.rating
                       ? "fill-yellow-400 text-yellow-400"
-                      : "text-slate-300"
+                      : "text-slate-300 dark:text-slate-600"
                   }`}
                 />
               ))}
-              <span className="ml-1 text-xs text-slate-600">
+              <span className="ml-1 text-xs text-slate-600 dark:text-slate-400">
                 {recommendation.professional.rating.toFixed(1)}
               </span>
             </div>
@@ -250,7 +250,7 @@ function RecommendationCard({ recommendation }: { recommendation: PersonalRecomm
             {recommendation.selectedTags.map((tag, index) => (
               <span
                 key={index}
-                className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700"
+                className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300"
               >
                 {tag}
               </span>
@@ -259,22 +259,22 @@ function RecommendationCard({ recommendation }: { recommendation: PersonalRecomm
         )}
         
         {recommendation.note && (
-          <p className="mt-3 text-sm text-slate-700 line-clamp-2">{recommendation.note}</p>
+          <p className="mt-3 text-sm text-slate-700 dark:text-slate-300 line-clamp-2">{recommendation.note}</p>
         )}
         
         {recommendation.wouldUseAgain && (
-          <p className="mt-2 text-xs text-slate-600">
+          <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
             Would use again: <span className="font-medium">{recommendation.wouldUseAgain}</span>
           </p>
         )}
       </Link>
       
       {recommendation.professionalReply && (
-        <div className="mt-3 rounded-lg bg-slate-50 p-3 border-t border-slate-200">
-          <p className="text-xs font-semibold text-slate-600 mb-1">
+        <div className="mt-3 rounded-lg bg-slate-50 dark:bg-slate-700 p-3 border-t border-slate-200 dark:border-slate-600">
+          <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
             Professional Response
           </p>
-          <p className="text-sm text-slate-700">{recommendation.professionalReply}</p>
+          <p className="text-sm text-slate-700 dark:text-slate-300">{recommendation.professionalReply}</p>
         </div>
       )}
     </div>

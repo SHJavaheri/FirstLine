@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 
 import { getCurrentUser } from "@/backend/auth/current-user";
-import { SiteHeader } from "@/components/site-header";
+import { Providers } from "@/components/providers";
 import "./globals.css";
 
 const fontSans = Manrope({
@@ -17,7 +17,7 @@ const fontDisplay = Fraunces({
 
 export const metadata: Metadata = {
   title: "FirstLine",
-  description: "Discover top lawyers by specialization, location, rate, and rating.",
+  description: "Discover trusted professionals across law, finance, real estate, therapy, consulting, and more.",
 };
 
 export const dynamic = "force-dynamic";
@@ -33,14 +33,15 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${fontSans.variable} ${fontDisplay.variable} antialiased`}>
-        <SiteHeader
+        <Providers
           user={
             user
               ? { id: user.id, email: user.email, name: name || user.email, role: user.role }
               : null
           }
-        />
-        <main>{children}</main>
+        >
+          {children}
+        </Providers>
       </body>
     </html>
   );
