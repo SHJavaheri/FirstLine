@@ -3,47 +3,85 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Bell, User, Check, X } from "lucide-react";
-import type { FriendRequest } from "@/types";
+import { Bell, User, Check, X, Star, Award } from "lucide-react";
 
-export function FriendNotifications() {
+type Notification = {
+  id: string;
+  type: "FRIEND_REQUEST" | "RATING_RECEIVED" | "RECOMMENDATION_RECEIVED";
+  relatedId: string;
+  actorId: string | null;
+  message: string | null;
+  isRead: boolean;
+  createdAt: Date;
+  destinationProfileId: string | null;
+};
+
+type FriendRequest = {
+  id: string;
+  sender: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    profilePhotoUrl: string | null;
+    email: string;
+    role: string;
+    professional?: { profession: string } | null;
+  };
+  createdAt: Date;
+};
+
+export function NotificationBell() {
   const router = useRouter();
-  const [requests, setRequests] = useState<FriendRequest[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [hasViewed, setHasViewed] = useState(false);
 
   useEffect(() => {
-    const fetchRequests = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/friends/requests?type=received&status=PENDING");
-        if (response.ok) {
-          const data = await response.json();
-          const newRequests = data.requests || [];
+        const [notifResponse, requestsResponse] = await Promise.all([
+          fetch("/api/notifications?unreadOnly=true"),
+          fetch("/api/friends/requests?type=received&status=PENDING"),
+        ]);
+
+        if (notifResponse.ok) {
+          const data = await notifResponse.json();
+          const newNotifications = data.notifications || [];
           
-          // If we have new requests that weren't there before, reset hasViewed
-          if (newRequests.length > requests.length) {
+          if (newNotifications.length > notifications.length) {
             setHasViewed(false);
           }
           
-          setRequests(newRequests);
+          setNotifications(newNotifications);
+        }
+
+        if (requestsResponse.ok) {
+          const data = await requestsResponse.json();
+          const newRequests = data.requests || [];
+          
+          if (newRequests.length > friendRequests.length) {
+            setHasViewed(false);
+          }
+          
+          setFriendRequests(newRequests);
         }
       } catch (err) {
-        console.error("Error fetching friend requests:", err);
+        console.error("Error fetching notifications:", err);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchRequests();
+    fetchData();
     
-    // Poll every 30 seconds for new requests
-    const interval = setInterval(fetchRequests, 30000);
+    const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
-  }, [requests.length]);
+  }, [notifications.length, friendRequests.length]);
 
-  const handleAccept = async (requestId: string) => {
+  const handleAcceptFriend = async (requestId: string) => {
     setActionLoading(requestId);
     try {
       const response = await fetch(`/api/friends/requests/${requestId}`, {
@@ -56,7 +94,7 @@ export function FriendNotifications() {
         throw new Error("Failed to accept friend request");
       }
 
-      setRequests(prev => prev.filter(r => r.id !== requestId));
+      setFriendRequests(prev => prev.filter(r => r.id !== requestId));
       router.refresh();
     } catch (err) {
       console.error("Error accepting friend request:", err);
@@ -66,7 +104,7 @@ export function FriendNotifications() {
     }
   };
 
-  const handleDecline = async (requestId: string) => {
+  const handleDeclineFriend = async (requestId: string) => {
     setActionLoading(requestId);
     try {
       const response = await fetch(`/api/friends/requests/${requestId}`, {
@@ -79,7 +117,7 @@ export function FriendNotifications() {
         throw new Error("Failed to decline friend request");
       }
 
-      setRequests(prev => prev.filter(r => r.id !== requestId));
+      setFriendRequests(prev => prev.filter(r => r.id !== requestId));
       router.refresh();
     } catch (err) {
       console.error("Error declining friend request:", err);
@@ -101,6 +139,28 @@ export function FriendNotifications() {
     return name;
   };
 
+  const handleToggle = () => {
+    if (!isOpen) {
+      setHasViewed(true);
+    }
+    setIsOpen(!isOpen);
+  };
+
+  const totalUnread = notifications.length + friendRequests.length;
+
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case "RATING_RECEIVED":
+        return <Star className="h-4 w-4 text-amber-500" />;
+      case "RECOMMENDATION_RECEIVED":
+        return <Award className="h-4 w-4 text-blue-500" />;
+      case "FRIEND_REQUEST":
+        return <User className="h-4 w-4 text-slate-500" />;
+      default:
+        return <Bell className="h-4 w-4 text-slate-500" />;
+    }
+  };
+
   const getFriendRequestProfileHref = (request: FriendRequest) => {
     if (request.sender.role === "PROFESSIONAL") {
       return `/lawyers/${request.sender.id}`;
@@ -109,11 +169,37 @@ export function FriendNotifications() {
     return `/profile/${request.sender.id}`;
   };
 
-  const handleToggle = () => {
-    if (!isOpen) {
-      setHasViewed(true);
+  const getNotificationHref = (notification: Notification) => {
+    switch (notification.type) {
+      case "RATING_RECEIVED":
+        return notification.destinationProfileId
+          ? `/lawyers/${notification.destinationProfileId}`
+          : "/profile";
+      case "RECOMMENDATION_RECEIVED":
+        return notification.destinationProfileId
+          ? `/lawyers/${notification.destinationProfileId}`
+          : "/profile";
+      default:
+        return "/profile";
     }
-    setIsOpen(!isOpen);
+  };
+
+  const markNotificationAsRead = async (notificationId: string) => {
+    try {
+      await fetch(`/api/notifications/${notificationId}`, {
+        method: "PATCH",
+      });
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
+  };
+
+  const handleNotificationClick = async (notification: Notification) => {
+    await markNotificationAsRead(notification.id);
+    setNotifications((prev) => prev.filter((item) => item.id !== notification.id));
+    setIsOpen(false);
+    router.push(getNotificationHref(notification));
+    router.refresh();
   };
 
   return (
@@ -123,9 +209,9 @@ export function FriendNotifications() {
         className="relative rounded-lg p-2 text-slate-700 hover:bg-slate-100"
       >
         <Bell className="h-5 w-5" />
-        {requests.length > 0 && !hasViewed && (
+        {totalUnread > 0 && !hasViewed && (
           <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-xs text-white">
-            {requests.length}
+            {totalUnread > 9 ? "9+" : totalUnread}
           </span>
         )}
       </button>
@@ -138,18 +224,7 @@ export function FriendNotifications() {
           />
           <div className="absolute right-0 top-full z-20 mt-2 w-96 rounded-lg border border-slate-200 bg-white shadow-lg">
             <div className="border-b border-slate-200 px-4 py-3">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-slate-900">Friend Requests</h3>
-                {requests.length > 0 && (
-                  <Link
-                    href="/friends/requests"
-                    className="text-sm text-blue-600 hover:text-blue-700"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    View All
-                  </Link>
-                )}
-              </div>
+              <h3 className="font-semibold text-slate-900">Notifications</h3>
             </div>
 
             <div className="max-h-96 overflow-y-auto">
@@ -157,13 +232,13 @@ export function FriendNotifications() {
                 <div className="flex items-center justify-center py-8">
                   <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
                 </div>
-              ) : requests.length === 0 ? (
+              ) : totalUnread === 0 ? (
                 <div className="px-4 py-8 text-center">
-                  <p className="text-sm text-slate-600">No pending friend requests</p>
+                  <p className="text-sm text-slate-600">No new notifications</p>
                 </div>
               ) : (
                 <div className="divide-y divide-slate-200">
-                  {requests.map((request) => (
+                  {friendRequests.map((request) => (
                     <div key={request.id} className="p-4">
                       <div className="flex items-start gap-3">
                         <Link
@@ -191,11 +266,14 @@ export function FriendNotifications() {
                             {getDisplayNameWithProfession(request.sender)}
                           </Link>
                           <p className="text-xs text-slate-600 mt-1">
+                            Sent you a friend request
+                          </p>
+                          <p className="text-xs text-slate-500 mt-1">
                             {new Date(request.createdAt).toLocaleDateString()}
                           </p>
                           <div className="mt-2 flex gap-2">
                             <button
-                              onClick={() => handleAccept(request.id)}
+                              onClick={() => handleAcceptFriend(request.id)}
                               disabled={actionLoading === request.id}
                               className="flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                             >
@@ -203,7 +281,7 @@ export function FriendNotifications() {
                               Accept
                             </button>
                             <button
-                              onClick={() => handleDecline(request.id)}
+                              onClick={() => handleDeclineFriend(request.id)}
                               disabled={actionLoading === request.id}
                               className="flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
                             >
@@ -214,6 +292,29 @@ export function FriendNotifications() {
                         </div>
                       </div>
                     </div>
+                  ))}
+
+                  {notifications.map((notification) => (
+                    <button
+                      key={notification.id}
+                      type="button"
+                      onClick={() => void handleNotificationClick(notification)}
+                      className="block w-full p-4 text-left hover:bg-slate-50"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
+                          {getNotificationIcon(notification.type)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-slate-900">
+                            {notification.message}
+                          </p>
+                          <p className="text-xs text-slate-500 mt-1">
+                            {new Date(notification.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
                   ))}
                 </div>
               )}

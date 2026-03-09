@@ -69,6 +69,8 @@ export type FriendRequest = {
     lastName: string | null;
     profilePhotoUrl: string | null;
     email: string;
+    role: AccountRole;
+    profession?: string | null;
   };
   receiver: {
     id: string;
@@ -76,6 +78,8 @@ export type FriendRequest = {
     lastName: string | null;
     profilePhotoUrl: string | null;
     email: string;
+    role: AccountRole;
+    profession?: string | null;
   };
 };
 
@@ -89,6 +93,8 @@ export type Friend = {
   locationCity: string | null;
   locationState: string | null;
   jobTitle: string | null;
+  role: AccountRole;
+  profession?: string | null;
   createdAt: Date;
 };
 
@@ -128,6 +134,7 @@ export type ConsumerSearchResult = {
   firstName: string | null;
   lastName: string | null;
   email: string;
+  role: AccountRole;
   profilePhotoUrl: string | null;
   bio: string | null;
   locationCity: string | null;
@@ -139,6 +146,7 @@ export type ConsumerSearchResult = {
   followersCount: number;
   isFriend: boolean;
   pendingRequest: "sent" | "received" | null;
+  profession?: string | null;
 };
 
 export type ConsumerProfile = {
@@ -171,6 +179,7 @@ export type PersonalRecommendation = {
   visibility: ProfileVisibility;
   selectedTags: string[];
   wouldUseAgain: string | null;
+  professionalReply: string | null;
   createdAt: Date;
   professional: {
     id: string;
@@ -187,6 +196,7 @@ export type ConsumerRating = {
   id: string;
   rating: number;
   comment: string | null;
+  professionalReply: string | null;
   createdAt: Date;
   professional: {
     id: string;

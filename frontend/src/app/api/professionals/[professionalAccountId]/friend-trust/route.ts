@@ -5,7 +5,7 @@ import { getFriendTrustDataForProfessional } from "@/backend/repositories/friend
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ professionalId: string }> }
+  { params }: { params: Promise<{ professionalAccountId: string }> }
 ) {
   try {
     const user = await getCurrentUser();
@@ -14,8 +14,11 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { professionalId } = await params;
-    const trustData = await getFriendTrustDataForProfessional(user.id, professionalId);
+    const { professionalAccountId } = await params;
+    const trustData = await getFriendTrustDataForProfessional(
+      user.id,
+      professionalAccountId
+    );
     return NextResponse.json({ trustData });
   } catch (error) {
     console.error("Error fetching friend trust data:", error);

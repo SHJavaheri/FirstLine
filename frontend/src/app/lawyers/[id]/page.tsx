@@ -26,6 +26,7 @@ export default async function LawyerProfilePage({
 
   const user = await getCurrentUser();
   const isConsumer = user?.role === "CONSUMER";
+  const isProfessional = user?.role === "PROFESSIONAL" && user.id === lawyer.accountId;
   const userRating = isConsumer ? await getRating(user.id, lawyer.accountId) : null;
   const allRatings = await getProfessionalRatings(lawyer.accountId);
 
@@ -104,7 +105,11 @@ export default async function LawyerProfilePage({
           </h2>
         </CardHeader>
         <CardContent>
-          <RatingsList ratings={allRatings} />
+          <RatingsList 
+            ratings={allRatings} 
+            currentUserId={user?.id}
+            isProfessional={isProfessional}
+          />
         </CardContent>
       </Card>
     </section>

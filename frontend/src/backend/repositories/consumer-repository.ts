@@ -32,7 +32,7 @@ export async function searchConsumers(
   const { query, limit = 50, offset = 0 } = filters;
 
   const where: Record<string, unknown> = {
-    role: "CONSUMER",
+    role: { in: ["CONSUMER", "PROFESSIONAL"] },
     isSuspended: false,
     id: { not: currentUserId },
   };
@@ -53,6 +53,7 @@ export async function searchConsumers(
       firstName: true,
       lastName: true,
       email: true,
+      role: true,
       profilePhotoUrl: true,
       bio: true,
       locationCity: true,
@@ -60,6 +61,11 @@ export async function searchConsumers(
       jobTitle: true,
       profileVisibility: true,
       createdAt: true,
+      professional: {
+        select: {
+          profession: true,
+        },
+      },
       _count: {
         select: {
           friendships: true,
@@ -106,6 +112,7 @@ export async function searchConsumers(
     firstName: consumer.firstName,
     lastName: consumer.lastName,
     email: consumer.email,
+    role: consumer.role,
     profilePhotoUrl: consumer.profilePhotoUrl,
     bio: consumer.bio,
     locationCity: consumer.locationCity,
@@ -117,6 +124,7 @@ export async function searchConsumers(
     followersCount: consumer._count.friendOf,
     isFriend: friendIds.has(consumer.id),
     pendingRequest: requestMap.get(consumer.id) || null,
+    profession: consumer.professional?.profession || null,
   }));
 }
 

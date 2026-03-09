@@ -15,11 +15,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
 
-    if (user.role !== "CONSUMER") {
-      console.error("Friend request error: User is not a consumer", { userId: user.id, role: user.role });
-      return NextResponse.json({ error: "Only consumers can send friend requests" }, { status: 403 });
-    }
-
     const body = await request.json();
     const { receiverId } = body;
 
@@ -44,7 +39,7 @@ export async function GET(request: Request) {
   try {
     const user = await getCurrentUser();
 
-    if (!user || user.role !== "CONSUMER") {
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

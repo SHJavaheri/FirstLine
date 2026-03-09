@@ -1,11 +1,13 @@
 import { Star, User } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { RatingReplyDialog } from "./rating-reply-dialog";
 
 type Rating = {
   id: string;
   rating: number;
   comment: string | null;
+  professionalReply: string | null;
   createdAt: Date;
   consumer: {
     id: string;
@@ -17,9 +19,11 @@ type Rating = {
 
 type RatingsListProps = {
   ratings: Rating[];
+  currentUserId?: string;
+  isProfessional?: boolean;
 };
 
-export function RatingsList({ ratings }: RatingsListProps) {
+export function RatingsList({ ratings, currentUserId, isProfessional }: RatingsListProps) {
   if (ratings.length === 0) {
     return (
       <p className="text-sm text-slate-600">
@@ -77,6 +81,23 @@ export function RatingsList({ ratings }: RatingsListProps) {
                   </div>
                   {rating.comment && (
                     <p className="text-sm text-slate-700">{rating.comment}</p>
+                  )}
+                  {rating.professionalReply && (
+                    <div className="mt-3 rounded-lg bg-slate-50 p-3">
+                      <p className="text-xs font-semibold text-slate-600 mb-1">
+                        Professional Response
+                      </p>
+                      <p className="text-sm text-slate-700">{rating.professionalReply}</p>
+                    </div>
+                  )}
+                  {isProfessional && currentUserId && (
+                    <div className="mt-3">
+                      <RatingReplyDialog
+                        ratingId={rating.id}
+                        consumerName={fullName}
+                        existingReply={rating.professionalReply}
+                      />
+                    </div>
                   )}
                 </div>
               </div>
