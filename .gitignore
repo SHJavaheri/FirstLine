@@ -1,0 +1,4 @@
+# Keep README files and the migration guide, ignore all other Markdown documentation
+*.md
+!**/README.md
+!frontend/MIGRATION_INSTRUCTIONS.md
