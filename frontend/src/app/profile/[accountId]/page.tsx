@@ -13,8 +13,8 @@ export default async function ConsumerProfilePage({
 }) {
   const user = await getCurrentUser();
 
-  if (!user || user.role !== "CONSUMER") {
-    redirect("/");
+  if (!user) {
+    redirect("/auth/login");
   }
 
   const { accountId } = await params;

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getCurrentUser } from "@/backend/auth/current-user";
 import { addOrUpdateRating, deleteRating, getRating } from "@/backend/repositories/rating-repository";
+import { createNotification } from "@/backend/repositories/notification-repository";
 
 export async function POST(request: Request) {
   try {
@@ -23,6 +24,21 @@ export async function POST(request: Request) {
     }
 
     const result = await addOrUpdateRating(user.id, professionalAccountId, rating, comment);
+    
+    // Create notification for the professional
+    try {
+      await createNotification(
+        professionalAccountId,
+        "RATING_RECEIVED",
+        result.id,
+        user.id,
+        `${user.firstName || user.email} rated you ${rating} stars`
+      );
+    } catch (notifError) {
+      console.error("Error creating notification:", notifError);
+      // Don't fail the rating if notification fails
+    }
+    
     return NextResponse.json({ success: true, rating: result });
   } catch (error) {
     console.error("Error adding/updating rating:", error);

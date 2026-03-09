@@ -83,6 +83,22 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
     return [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email;
   };
 
+  const getDisplayNameWithProfession = (user: { firstName: string | null; lastName: string | null; email: string; role?: string; professional?: { profession: string } | null }) => {
+    const name = [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email;
+    if (user.role === "PROFESSIONAL" && user.professional?.profession) {
+      return `${name} (${user.professional.profession})`;
+    }
+    return name;
+  };
+
+  const getProfileHref = (user: { id: string; role?: string }) => {
+    if (user.role === "PROFESSIONAL") {
+      return `/lawyers/${user.id}`;
+    }
+
+    return `/profile/${user.id}`;
+  };
+
   return (
     <div className="space-y-6">
       {/* Received Requests */}
@@ -101,7 +117,7 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                 className="flex items-center justify-between rounded-lg border border-slate-200 p-4"
               >
                 <div className="flex items-center gap-4">
-                  <Link href={`/profile/${request.sender.id}`}>
+                  <Link href={getProfileHref(request.sender)}>
                     {request.sender.profilePhotoUrl ? (
                       <img
                         src={request.sender.profilePhotoUrl}
@@ -116,10 +132,10 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                   </Link>
                   <div>
                     <Link
-                      href={`/profile/${request.sender.id}`}
+                      href={getProfileHref(request.sender)}
                       className="font-medium text-slate-900 hover:text-blue-600"
                     >
-                      {getDisplayName(request.sender)}
+                      {getDisplayNameWithProfession(request.sender)}
                     </Link>
                     <p className="text-sm text-slate-600">
                       {new Date(request.createdAt).toLocaleDateString()}
@@ -166,7 +182,7 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                 className="flex items-center justify-between rounded-lg border border-slate-200 p-4"
               >
                 <div className="flex items-center gap-4">
-                  <Link href={`/profile/${request.receiver.id}`}>
+                  <Link href={getProfileHref(request.receiver)}>
                     {request.receiver.profilePhotoUrl ? (
                       <img
                         src={request.receiver.profilePhotoUrl}
@@ -181,7 +197,7 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                   </Link>
                   <div>
                     <Link
-                      href={`/profile/${request.receiver.id}`}
+                      href={getProfileHref(request.receiver)}
                       className="font-medium text-slate-900 hover:text-blue-600"
                     >
                       {getDisplayName(request.receiver)}

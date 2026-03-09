@@ -3,7 +3,7 @@ import { Scale } from "lucide-react";
 
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Button } from "@/components/ui/button";
-import { FriendNotifications } from "@/components/friends/friend-notifications";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 import type { AccountRole } from "@/types";
 
 type SiteHeaderProps = {
@@ -27,15 +27,21 @@ export function SiteHeader({ user }: SiteHeaderProps) {
         </Link>
 
         <nav className="flex flex-wrap items-center gap-2">
-          <Button asChild variant="ghost" size="sm">
-            <Link href="/lawyers">Explore</Link>
-          </Button>
-
           {user?.role === "CONSUMER" && (
             <Button asChild variant="ghost" size="sm">
               <Link href="/discover-friends">Friends</Link>
             </Button>
           )}
+
+          {user?.role === "PROFESSIONAL" && (
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/discover-friends">Client Lookup</Link>
+            </Button>
+          )}
+
+          <Button asChild variant="ghost" size="sm">
+            <Link href="/lawyers">Explore</Link>
+          </Button>
 
           {user?.role === "ADMIN" ? (
             <>
@@ -53,7 +59,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
 
           {user ? (
             <>
-              {user.role === "CONSUMER" && <FriendNotifications />}
+              <NotificationBell />
               <Button asChild variant="ghost" size="sm" className="hidden md:flex">
                 <Link href="/profile">
                   {user.name ? user.name : user.email}

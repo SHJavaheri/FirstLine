@@ -13,7 +13,7 @@ export async function sendFriendRequest(senderId: string, receiverId: string) {
     throw new Error("Cannot send friend request to yourself");
   }
 
-  // Check both users are consumers
+  // Check both users exist and are not suspended
   const [sender, receiver] = await Promise.all([
     prisma.account.findUnique({ where: { id: senderId }, select: { role: true, isSuspended: true } }),
     prisma.account.findUnique({ where: { id: receiverId }, select: { role: true, isSuspended: true, allowFriendRequests: true } }),
@@ -21,10 +21,6 @@ export async function sendFriendRequest(senderId: string, receiverId: string) {
 
   if (!sender || !receiver) {
     throw new Error("User not found");
-  }
-
-  if (sender.role !== "CONSUMER" || receiver.role !== "CONSUMER") {
-    throw new Error("Only consumers can send/receive friend requests");
   }
 
   if (sender.isSuspended || receiver.isSuspended) {
@@ -256,6 +252,12 @@ export async function getFriendRequests(
           lastName: true,
           profilePhotoUrl: true,
           email: true,
+          role: true,
+          professional: {
+            select: {
+              profession: true,
+            },
+          },
         },
       },
       receiver: {
@@ -265,6 +267,12 @@ export async function getFriendRequests(
           lastName: true,
           profilePhotoUrl: true,
           email: true,
+          role: true,
+          professional: {
+            select: {
+              profession: true,
+            },
+          },
         },
       },
     },

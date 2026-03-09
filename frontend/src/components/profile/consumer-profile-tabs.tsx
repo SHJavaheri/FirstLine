@@ -140,6 +140,14 @@ function RatingsTab({ ratings }: { ratings: ConsumerRating[] }) {
           {rating.comment && (
             <p className="mt-3 text-slate-700">{rating.comment}</p>
           )}
+          {rating.professionalReply && (
+            <div className="mt-3 rounded-lg bg-slate-50 p-3">
+              <p className="text-xs font-semibold text-slate-600 mb-1">
+                Professional Response
+              </p>
+              <p className="text-sm text-slate-700">{rating.professionalReply}</p>
+            </div>
+          )}
           <p className="mt-2 text-xs text-slate-500">
             {new Date(rating.createdAt).toLocaleDateString()}
           </p>
@@ -260,6 +268,15 @@ function RecommendationCard({ recommendation }: { recommendation: PersonalRecomm
           </p>
         )}
       </Link>
+      
+      {recommendation.professionalReply && (
+        <div className="mt-3 rounded-lg bg-slate-50 p-3 border-t border-slate-200">
+          <p className="text-xs font-semibold text-slate-600 mb-1">
+            Professional Response
+          </p>
+          <p className="text-sm text-slate-700">{recommendation.professionalReply}</p>
+        </div>
+      )}
     </div>
   );
 }

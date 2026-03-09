@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getCurrentUser } from "@/backend/auth/current-user";
 import { createRecommendation } from "@/backend/repositories/recommendation-repository";
+import { createNotification } from "@/backend/repositories/notification-repository";
 import { prisma } from "@/database/prisma";
 
 export async function POST(request: Request) {
@@ -34,6 +35,20 @@ export async function POST(request: Request) {
       selectedTags,
       wouldUseAgain,
     });
+
+    // Create notification for the professional
+    try {
+      await createNotification(
+        professionalAccountId,
+        "RECOMMENDATION_RECEIVED",
+        recommendation.id,
+        user.id,
+        `${user.firstName || user.email} recommended you for ${category}`
+      );
+    } catch (notifError) {
+      console.error("Error creating notification:", notifError);
+      // Don't fail the recommendation if notification fails
+    }
 
     return NextResponse.json({ success: true, recommendation });
   } catch (error) {

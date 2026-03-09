@@ -94,7 +94,14 @@ export function ConsumerCard({ consumer, onSendRequest, onCancelRequest }: Consu
         </div>
 
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-slate-900 truncate">{displayName}</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-slate-900 truncate">{displayName}</h3>
+            {consumer.role === "PROFESSIONAL" && consumer.profession && (
+              <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                {consumer.profession}
+              </span>
+            )}
+          </div>
           
           {consumer.jobTitle && (
             <div className="mt-1 flex items-center gap-1 text-sm text-slate-600">
