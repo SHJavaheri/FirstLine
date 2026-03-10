@@ -40,6 +40,7 @@ model Account {
   firstName       String?
   lastName        String?
   profilePhotoUrl String?
+  bannerPhotoUrl  String?
   jobTitle        String?
   bio             String?
   locationCity    String?
@@ -63,6 +64,17 @@ model Account {
   profileVisibility       ProfileVisibility @default(PUBLIC)
   personalRecommendations PersonalRecommendation[]
   notifications           Notification[]
+  
+  serviceInterests        String[] @default([])
+  consultationPreference  String?
+  budgetMin               Int?
+  budgetMax               Int?
+  distancePreference      Int?
+  emailVerified           Boolean  @default(false)
+  phoneVerified           Boolean  @default(false)
+  identityVerified        Boolean  @default(false)
+  notificationPreferences Json?
+  activityLogs            ActivityLog[]
 
   @@index([createdAt])
 }
@@ -221,4 +233,18 @@ model Notification {
 
   @@index([recipientId, isRead])
   @@index([createdAt])
+}
+
+model ActivityLog {
+  id              String   @id @default(cuid())
+  accountId       String
+  activityType    String
+  relatedId       String?
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  
+  account         Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  
+  @@index([accountId, createdAt])
+  @@index([activityType])
 }

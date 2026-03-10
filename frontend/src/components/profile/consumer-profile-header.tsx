@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { User, MapPin, Briefcase, Users, Lock } from "lucide-react";
+import { User, MapPin, CheckCircle, Calendar, Lock, Edit, Pen, Image, Camera } from "lucide-react";
 import type { ConsumerProfile } from "@/types";
 import { ConnectionsStats } from "@/components/friends/connections-stats";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { EditProfileDialog } from "@/components/profile/edit-profile-dialog";
+import { ProfileBannerUpload } from "@/components/profile/profile-banner-upload";
+import { ProfilePhotoUpload } from "@/components/profile/profile-photo-upload";
 
 type ConsumerProfileHeaderProps = {
   profile: ConsumerProfile;
@@ -73,135 +78,241 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
 
   if (!profile.canViewDetails) {
     return (
-      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-sm">
-        <div className="flex items-center gap-6">
-          <div className="flex-shrink-0">
-            {profile.profilePhotoUrl ? (
-              <img
-                src={profile.profilePhotoUrl}
-                alt={displayName}
-                className="h-24 w-24 rounded-full object-cover"
-              />
-            ) : (
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
-                <User className="h-12 w-12 text-slate-500 dark:text-slate-400" />
+      <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="relative h-40">
+          {profile.bannerPhotoUrl ? (
+            <img
+              src={profile.bannerPhotoUrl}
+              alt={`${displayName}'s banner`}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="h-full w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-cyan-700" />
+          )}
+        </div>
+        
+        <div className="relative px-6 pb-6">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
+            <div className="-mt-20 flex-shrink-0">
+              <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-lg">
+                {profile.profilePhotoUrl ? (
+                  <img
+                    src={profile.profilePhotoUrl}
+                    alt={displayName}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-cyan-500 to-blue-500">
+                    <span className="text-5xl font-bold text-white">
+                      {displayName.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{displayName}</h1>
-            {profile.isSelf && (
-              <ConnectionsStats
-                accountId={profile.id}
-                followingCount={profile.followingCount}
-                followersCount={profile.followersCount}
-                ratingsCount={profile.ratingsCount}
-              />
-            )}
-            <div className="mt-4 flex items-center gap-2 text-slate-600 dark:text-slate-400">
-              <Lock className="h-5 w-5" />
-              <p className="text-sm">This profile is private</p>
             </div>
-            {!profile.isFriend && (
-              <button
-                onClick={handleSendRequest}
-                disabled={isLoading}
-                className="mt-4 rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-              >
-                {isLoading ? "Sending..." : "Send Friend Request"}
-              </button>
-            )}
+
+            <div className="flex-1 space-y-4 pt-4 sm:pt-0">
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">{displayName}</h1>
+                  <Lock className="h-5 w-5 text-slate-400" />
+                </div>
+                <p className="mt-2 text-sm text-slate-600">This profile is private</p>
+              </div>
+
+              {!profile.isFriend && (
+                <Button
+                  onClick={handleSendRequest}
+                  disabled={isLoading}
+                  className="gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700"
+                >
+                  {isLoading ? "Sending..." : "Send Friend Request"}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
+  const memberSince = profile.createdAt ? new Date(profile.createdAt).getFullYear() : null;
+
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-sm">
-      <div className="flex items-start gap-6">
-        <div className="flex-shrink-0">
-          {profile.profilePhotoUrl ? (
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      {profile.isSelf ? (
+        <ProfileBannerUpload 
+          currentBannerUrl={profile.bannerPhotoUrl} 
+          userName={displayName}
+        />
+      ) : (
+        <div className="relative h-40 sm:h-48">
+          {profile.bannerPhotoUrl ? (
             <img
-              src={profile.profilePhotoUrl}
-              alt={displayName}
-              className="h-24 w-24 rounded-full object-cover"
+              src={profile.bannerPhotoUrl}
+              alt={`${displayName}'s banner`}
+              className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
-              <User className="h-12 w-12 text-slate-500 dark:text-slate-400" />
-            </div>
+            <div className="h-full w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-cyan-700" />
           )}
         </div>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{displayName}</h1>
-              
-              {profile.jobTitle && (
-                <div className="mt-2 flex items-center gap-2 text-slate-600 dark:text-slate-400">
-                  <Briefcase className="h-5 w-5" />
-                  <span>{profile.jobTitle}</span>
+      )}
+      
+      <div className="relative px-6 pb-6 pt-6 sm:px-8 sm:pb-8 sm:pt-8">
+        <div className="flex flex-col gap-7 sm:flex-row sm:items-start sm:gap-9">
+          <div className="-mt-20 flex-shrink-0 sm:-mt-24">
+            {profile.isSelf ? (
+              <ProfilePhotoUpload currentPhotoUrl={profile.profilePhotoUrl} userName={displayName}>
+                <div className="group relative h-40 w-40 cursor-pointer overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-lg sm:h-48 sm:w-48">
+                  {profile.profilePhotoUrl ? (
+                    <img
+                      src={profile.profilePhotoUrl}
+                      alt={displayName}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-cyan-500 to-blue-500">
+                      <span className="text-5xl font-bold text-white sm:text-6xl">
+                        {displayName.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  {profile.emailVerified && (
+                    <div className="absolute bottom-2 right-2 rounded-full bg-white p-1.5 shadow-md">
+                      <CheckCircle className="h-7 w-7 fill-blue-600 text-white" />
+                    </div>
+                  )}
+                  <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-full bg-black/45 opacity-0 transition-opacity group-hover:opacity-100">
+                    <Camera className="h-5 w-5 text-white" />
+                    <span className="text-xs font-semibold text-white">Update Photo</span>
+                  </div>
                 </div>
-              )}
-
-              {location && (
-                <div className="mt-1 flex items-center gap-2 text-slate-600 dark:text-slate-400">
-                  <MapPin className="h-5 w-5" />
-                  <span>{location}</span>
-                </div>
-              )}
-
-              <ConnectionsStats
-                accountId={profile.id}
-                followingCount={profile.followingCount}
-                followersCount={profile.followersCount}
-                ratingsCount={profile.ratingsCount}
-              />
-            </div>
-
-            {!profile.isSelf && (
-              <div className="flex gap-2">
-                {profile.isFriend ? (
-                  <button
-                    onClick={handleUnfriend}
-                    disabled={isLoading}
-                    className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50"
-                  >
-                    {isLoading ? "Removing..." : "Unfriend"}
-                  </button>
-                ) : profile.pendingRequest === "sent" ? (
-                  <button
-                    onClick={handleCancelRequest}
-                    disabled={isLoading}
-                    className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50"
-                  >
-                    {isLoading ? "Canceling..." : "Cancel Request"}
-                  </button>
-                ) : profile.pendingRequest === "received" ? (
-                  <button
-                    onClick={() => router.push("/friends/requests")}
-                    className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-                  >
-                    Respond to Request
-                  </button>
+              </ProfilePhotoUpload>
+            ) : (
+              <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-lg sm:h-48 sm:w-48">
+                {profile.profilePhotoUrl ? (
+                  <img
+                    src={profile.profilePhotoUrl}
+                    alt={displayName}
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
-                  <button
-                    onClick={handleSendRequest}
-                    disabled={isLoading}
-                    className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    {isLoading ? "Sending..." : "Send Friend Request"}
-                  </button>
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-cyan-500 to-blue-500">
+                    <span className="text-5xl font-bold text-white sm:text-6xl">
+                      {displayName.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                )}
+                {profile.emailVerified && (
+                  <div className="absolute bottom-2 right-2 rounded-full bg-white p-1.5 shadow-md">
+                    <CheckCircle className="h-7 w-7 fill-blue-600 text-white" />
+                  </div>
                 )}
               </div>
             )}
           </div>
 
-          {profile.bio && (
-            <p className="mt-4 text-slate-700 dark:text-slate-300">{profile.bio}</p>
-          )}
+          <div className="flex-1 space-y-4 pt-4 sm:pt-0">
+            <div>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+                <div className="flex-1 min-w-0 space-y-2">
+                  <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">{displayName}</h1>
+
+                  {profile.jobTitle && (
+                    <p className="mt-1 text-lg font-medium text-slate-700">{profile.jobTitle}</p>
+                  )}
+
+                  {location && (
+                    <div className="mt-2 flex items-center gap-2 text-slate-600">
+                      <MapPin className="h-4 w-4" />
+                      <span className="text-sm">{location}</span>
+                    </div>
+                  )}
+                </div>
+
+                {profile.isSelf ? (
+                  <EditProfileDialog user={{
+                    firstName: profile.firstName,
+                    lastName: profile.lastName,
+                    jobTitle: profile.jobTitle,
+                    bio: profile.bio,
+                    locationCity: profile.locationCity,
+                    locationState: profile.locationState,
+                    phone: null,
+                  }} />
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {profile.isFriend ? (
+                      <Button
+                        onClick={handleUnfriend}
+                        disabled={isLoading}
+                        variant="outline"
+                        size="sm"
+                      >
+                        {isLoading ? "Removing..." : "Unfriend"}
+                      </Button>
+                    ) : profile.pendingRequest === "sent" ? (
+                      <Button
+                        onClick={handleCancelRequest}
+                        disabled={isLoading}
+                        variant="outline"
+                        size="sm"
+                      >
+                        {isLoading ? "Canceling..." : "Cancel Request"}
+                      </Button>
+                    ) : profile.pendingRequest === "received" ? (
+                      <Button
+                        onClick={() => router.push("/friends/requests")}
+                        size="sm"
+                        className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700"
+                      >
+                        Respond to Request
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={handleSendRequest}
+                        disabled={isLoading}
+                        size="sm"
+                        className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700"
+                      >
+                        {isLoading ? "Sending..." : "Send Friend Request"}
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {profile.bio && (
+                <p className="mt-4 text-sm leading-relaxed text-slate-700 line-clamp-2">
+                  {profile.bio}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-slate-100 pt-4 text-sm">
+              <ConnectionsStats
+                accountId={profile.id}
+                followingCount={profile.followingCount || 0}
+                followersCount={profile.followersCount || 0}
+                ratingsCount={profile.ratingsCount || 0}
+              />
+              
+              {memberSince && (
+                <div className="flex items-center gap-2 text-slate-600">
+                  <Calendar className="h-4 w-4" />
+                  <span>Member since {memberSince}</span>
+                </div>
+              )}
+
+              {profile.emailVerified && (
+                <Badge variant="default" className="bg-blue-600 hover:bg-blue-700">
+                  <CheckCircle className="mr-1 h-3 w-3" />
+                  Verified
+                </Badge>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

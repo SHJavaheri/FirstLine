@@ -35,6 +35,7 @@ export async function registerUser(input: RegisterInput) {
     locationState: input.locationState,
     phone: input.phone,
     profilePhotoUrl: input.profilePhotoUrl,
+    bannerPhotoUrl: input.bannerPhotoUrl,
   };
 
   const account = await createAccount(payload);

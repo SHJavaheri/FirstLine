@@ -163,7 +163,7 @@ export function NotificationBell() {
 
   const getFriendRequestProfileHref = (request: FriendRequest) => {
     if (request.sender.role === "PROFESSIONAL") {
-      return `/lawyers/${request.sender.id}`;
+      return `/professionals/${request.sender.id}`;
     }
 
     return `/profile/${request.sender.id}`;
@@ -173,11 +173,11 @@ export function NotificationBell() {
     switch (notification.type) {
       case "RATING_RECEIVED":
         return notification.destinationProfileId
-          ? `/lawyers/${notification.destinationProfileId}`
+          ? `/professionals/${notification.destinationProfileId}`
           : "/profile";
       case "RECOMMENDATION_RECEIVED":
         return notification.destinationProfileId
-          ? `/lawyers/${notification.destinationProfileId}`
+          ? `/professionals/${notification.destinationProfileId}`
           : "/profile";
       default:
         return "/profile";

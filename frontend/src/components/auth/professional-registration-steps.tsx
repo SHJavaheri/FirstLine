@@ -18,6 +18,7 @@ export interface ProfessionalFormData {
   lastName: string;
   bio?: string;
   profilePhotoUrl?: string;
+  bannerPhotoUrl?: string;
   locationCity: string;
   locationState: string;
   phone?: string;
@@ -53,11 +54,12 @@ const PROFESSIONS = ["Lawyer", "Accountant", "Real Estate Agent", "Financial Adv
 const STEPS = [
   { id: 1, title: "Personal Info", description: "Tell us about yourself" },
   { id: 2, title: "Profile Picture", description: "Add a photo (optional)" },
-  { id: 3, title: "Professional Details", description: "Your credentials" },
-  { id: 4, title: "Firm & Experience", description: "Your practice information" },
-  { id: 5, title: "Pricing & Services", description: "How you work with clients" },
-  { id: 6, title: "Location & Contact", description: "Where are you located?" },
-  { id: 7, title: "Account Credentials", description: "Secure your account" },
+  { id: 3, title: "Banner Photo", description: "Add a cover photo (optional)" },
+  { id: 4, title: "Professional Details", description: "Your credentials" },
+  { id: 5, title: "Firm & Experience", description: "Your practice information" },
+  { id: 6, title: "Pricing & Services", description: "How you work with clients" },
+  { id: 7, title: "Location & Contact", description: "Where are you located?" },
+  { id: 8, title: "Account Credentials", description: "Secure your account" },
 ];
 
 export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: ProfessionalRegistrationStepsProps) {
@@ -67,6 +69,7 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
     lastName: "",
     bio: "",
     profilePhotoUrl: "",
+    bannerPhotoUrl: "",
     locationCity: "",
     locationState: "",
     phone: "",
@@ -115,7 +118,7 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
       if (!formData.lastName.trim()) {
         newErrors.lastName = "Last name is required";
       }
-    } else if (step === 3) {
+    } else if (step === 4) {
       if (!formData.licenseNumber.trim()) {
         newErrors.licenseNumber = "License number is required";
       }
@@ -128,7 +131,7 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
       if (!formData.specializations.trim()) {
         newErrors.specializations = "At least one specialization is required";
       }
-    } else if (step === 4) {
+    } else if (step === 5) {
       if (formData.totalExperienceYears === undefined || formData.totalExperienceYears < 0) {
         newErrors.totalExperienceYears = "Total experience years is required";
       }
@@ -140,14 +143,14 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
           newErrors.yearsAtCurrentFirm = "Years at current firm is required";
         }
       }
-    } else if (step === 6) {
+    } else if (step === 7) {
       if (!formData.locationCity.trim()) {
         newErrors.locationCity = "City is required";
       }
       if (!formData.locationState.trim()) {
         newErrors.locationState = "State/Province is required";
       }
-    } else if (step === 7) {
+    } else if (step === 8) {
       if (!formData.email.trim()) {
         newErrors.email = "Email is required";
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
@@ -263,6 +266,22 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
         return (
           <div className="space-y-4">
             <div className="space-y-2">
+              <Label>Banner Photo (Optional)</Label>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Add a cover photo to personalize your profile
+              </p>
+              <ImageUpload
+                value={formData.bannerPhotoUrl}
+                onChange={(value) => updateFormData("bannerPhotoUrl", value)}
+              />
+            </div>
+          </div>
+        );
+
+      case 4:
+        return (
+          <div className="space-y-4">
+            <div className="space-y-2">
               <Label htmlFor="profession">Profession *</Label>
               <select
                 id="profession"
@@ -336,7 +355,7 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
           </div>
         );
 
-      case 4:
+      case 5:
         return (
           <div className="space-y-4">
             <div className="space-y-2">
@@ -480,7 +499,7 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
           </div>
         );
 
-      case 5:
+      case 6:
         return (
           <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
@@ -614,7 +633,7 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
           </div>
         );
 
-      case 6:
+      case 7:
         return (
           <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
@@ -659,7 +678,7 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
           </div>
         );
 
-      case 7:
+      case 8:
         return (
           <div className="space-y-4">
             <div className="space-y-2">

@@ -60,6 +60,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       firstName: data.firstName,
       lastName: data.lastName,
       profilePhotoUrl: data.profilePhotoUrl || undefined,
+      bannerPhotoUrl: data.bannerPhotoUrl || undefined,
       jobTitle: data.jobTitle || undefined,
       bio: data.bio || undefined,
       locationCity: data.locationCity,
@@ -108,6 +109,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       firstName: data.firstName,
       lastName: data.lastName,
       profilePhotoUrl: data.profilePhotoUrl || undefined,
+      bannerPhotoUrl: data.bannerPhotoUrl || undefined,
       jobTitle: data.jobTitle || undefined,
       bio: data.bio || undefined,
       locationCity: data.locationCity,
@@ -180,6 +182,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       payload.firstName = String(formData.get("firstName") ?? "");
       payload.lastName = String(formData.get("lastName") ?? "");
       payload.profilePhotoUrl = toOptionalString(formData.get("profilePhotoUrl"));
+      payload.bannerPhotoUrl = toOptionalString(formData.get("bannerPhotoUrl"));
       payload.jobTitle = toOptionalString(formData.get("jobTitle"));
       payload.bio = toOptionalString(formData.get("bio"));
       payload.locationCity = String(formData.get("locationCity") ?? "");

@@ -85,18 +85,18 @@ export function ConnectionsModal({ accountId, defaultTab, open, onClose }: Conne
     <Dialog open={open} onOpenChange={(value) => !value && onClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold text-slate-900">Connections</DialogTitle>
-          <p className="text-sm text-slate-600">{subtitle}</p>
+          <DialogTitle className="text-xl font-semibold text-slate-900 dark:text-slate-100">Connections</DialogTitle>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{subtitle}</p>
         </DialogHeader>
 
-        <div className="flex items-center gap-2 border-b border-slate-200 pb-4">
+        <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 pb-4">
           <button
             type="button"
             onClick={() => setActiveTab("following")}
             className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
               activeTab === "following"
                 ? "border-blue-600 bg-blue-600 text-white"
-                : "border-slate-200 bg-white text-slate-700 hover:border-blue-200"
+                : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-blue-200 dark:hover:border-blue-400"
             }`}
           >
             Following
@@ -107,7 +107,7 @@ export function ConnectionsModal({ accountId, defaultTab, open, onClose }: Conne
             className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
               activeTab === "followers"
                 ? "border-blue-600 bg-blue-600 text-white"
-                : "border-slate-200 bg-white text-slate-700 hover:border-blue-200"
+                : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-blue-200 dark:hover:border-blue-400"
             }`}
           >
             Followers
@@ -115,7 +115,7 @@ export function ConnectionsModal({ accountId, defaultTab, open, onClose }: Conne
         </div>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
           <Input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -126,11 +126,11 @@ export function ConnectionsModal({ accountId, defaultTab, open, onClose }: Conne
 
         <div className="max-h-[400px] overflow-y-auto pt-4">
           {isLoading ? (
-            <div className="py-8 text-center text-sm text-slate-500">Loading...</div>
+            <div className="py-8 text-center text-sm text-slate-500 dark:text-slate-400">Loading...</div>
           ) : error ? (
-            <div className="py-8 text-center text-sm text-red-600">{error}</div>
+            <div className="py-8 text-center text-sm text-red-600 dark:text-red-400">{error}</div>
           ) : connections.length === 0 ? (
-            <div className="py-8 text-center text-sm text-slate-500">No connections to show</div>
+            <div className="py-8 text-center text-sm text-slate-500 dark:text-slate-400">No connections to show</div>
           ) : (
             <ul className="space-y-3">
               {connections.map((connection) => {
@@ -142,7 +142,7 @@ export function ConnectionsModal({ accountId, defaultTab, open, onClose }: Conne
                   <li key={connection.id}>
                     <Link
                       href={`/profile/${connection.id}`}
-                      className="flex items-center gap-4 rounded-lg border border-slate-200 p-3 hover:border-blue-200 hover:bg-blue-50/40"
+                      className="flex items-center gap-4 rounded-lg border border-slate-200 dark:border-slate-700 p-3 hover:border-blue-200 dark:hover:border-blue-400 hover:bg-blue-50/40 dark:hover:bg-blue-950/30"
                     >
                       {connection.profilePhotoUrl ? (
                         <img
@@ -151,16 +151,16 @@ export function ConnectionsModal({ accountId, defaultTab, open, onClose }: Conne
                           className="h-12 w-12 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-200">
-                          <Users className="h-5 w-5 text-slate-500" />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
+                          <Users className="h-5 w-5 text-slate-500 dark:text-slate-400" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="truncate font-medium text-slate-900">{name}</p>
+                        <p className="truncate font-medium text-slate-900 dark:text-slate-100">{name}</p>
                         {connection.jobTitle && (
-                          <p className="truncate text-sm text-slate-600">{connection.jobTitle}</p>
+                          <p className="truncate text-sm text-slate-600 dark:text-slate-400">{connection.jobTitle}</p>
                         )}
-                        {location && <p className="truncate text-xs text-slate-500">{location}</p>}
+                        {location && <p className="truncate text-xs text-slate-500 dark:text-slate-500">{location}</p>}
                       </div>
                     </Link>
                   </li>

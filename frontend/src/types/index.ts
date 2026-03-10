@@ -7,6 +7,7 @@ export type PublicAccount = {
   firstName?: string | null;
   lastName?: string | null;
   profilePhotoUrl?: string | null;
+  bannerPhotoUrl?: string | null;
   jobTitle?: string | null;
   bio?: string | null;
   locationCity?: string | null;
@@ -155,6 +156,7 @@ export type ConsumerProfile = {
   lastName: string | null;
   email?: string;
   profilePhotoUrl: string | null;
+  bannerPhotoUrl: string | null;
   bio?: string | null;
   locationCity?: string | null;
   locationState?: string | null;
@@ -168,6 +170,14 @@ export type ConsumerProfile = {
   isSelf: boolean;
   canViewDetails: boolean;
   pendingRequest?: "sent" | "received" | null;
+  emailVerified?: boolean;
+  phoneVerified?: boolean;
+  identityVerified?: boolean;
+  serviceInterests?: string[];
+  consultationPreference?: string | null;
+  budgetMin?: number | null;
+  budgetMax?: number | null;
+  distancePreference?: number | null;
 };
 
 export type PersonalRecommendation = {

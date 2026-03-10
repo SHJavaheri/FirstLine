@@ -80,6 +80,7 @@ export type CreateAccountInput = {
   firstName?: string;
   lastName?: string;
   profilePhotoUrl?: string;
+  bannerPhotoUrl?: string;
   jobTitle?: string;
   bio?: string;
   locationCity?: string;
@@ -96,6 +97,7 @@ export async function createAccount(data: CreateAccountInput) {
       firstName: data.firstName ?? null,
       lastName: data.lastName ?? null,
       profilePhotoUrl: data.profilePhotoUrl ?? null,
+      bannerPhotoUrl: data.bannerPhotoUrl ?? null,
       jobTitle: data.jobTitle ?? null,
       bio: data.bio ?? null,
       locationCity: data.locationCity ?? null,
