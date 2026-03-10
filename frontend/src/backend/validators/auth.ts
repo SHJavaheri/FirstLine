@@ -26,6 +26,7 @@ const baseRegisterSchema = z.object({
     .regex(/[a-z]/, "Password must include at least one lowercase letter")
     .regex(/[0-9]/, "Password must include at least one number"),
   profilePhotoUrl: optionalUrl,
+  bannerPhotoUrl: optionalUrl,
   jobTitle: optionalTrimmedString(80),
   bio: optionalTrimmedString(500),
   locationCity: z.string().trim().min(1, "City is required.").max(64),

@@ -103,7 +103,7 @@ export function FriendNotifications() {
 
   const getFriendRequestProfileHref = (request: FriendRequest) => {
     if (request.sender.role === "PROFESSIONAL") {
-      return `/lawyers/${request.sender.id}`;
+      return `/professionals/${request.sender.id}`;
     }
 
     return `/profile/${request.sender.id}`;

@@ -115,7 +115,7 @@ export function LawyerCard({
 
       <CardFooter>
         <Button asChild className="w-full">
-          <Link href={`/lawyers/${lawyer.id}`}>View Profile</Link>
+          <Link href={`/professionals/${lawyer.accountId}`}>View Profile</Link>
         </Button>
       </CardFooter>
     </Card>

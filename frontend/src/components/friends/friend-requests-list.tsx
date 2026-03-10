@@ -93,7 +93,7 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
 
   const getProfileHref = (user: { id: string; role?: string }) => {
     if (user.role === "PROFESSIONAL") {
-      return `/lawyers/${user.id}`;
+      return `/professionals/${user.id}`;
     }
 
     return `/profile/${user.id}`;

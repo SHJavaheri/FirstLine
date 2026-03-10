@@ -18,6 +18,7 @@ export interface ConsumerFormData {
   lastName: string;
   bio?: string;
   profilePhotoUrl?: string;
+  bannerPhotoUrl?: string;
   locationCity: string;
   locationState: string;
   phone?: string;
@@ -29,8 +30,9 @@ export interface ConsumerFormData {
 const STEPS = [
   { id: 1, title: "Personal Info", description: "Tell us about yourself" },
   { id: 2, title: "Profile Picture", description: "Add a photo (optional)" },
-  { id: 3, title: "Location & Contact", description: "Where are you located?" },
-  { id: 4, title: "Account Credentials", description: "Secure your account" },
+  { id: 3, title: "Banner Photo", description: "Add a cover photo (optional)" },
+  { id: 4, title: "Location & Contact", description: "Where are you located?" },
+  { id: 5, title: "Account Credentials", description: "Secure your account" },
 ];
 
 export function ConsumerRegistrationSteps({ onSubmit, isLoading }: ConsumerRegistrationStepsProps) {
@@ -40,6 +42,7 @@ export function ConsumerRegistrationSteps({ onSubmit, isLoading }: ConsumerRegis
     lastName: "",
     bio: "",
     profilePhotoUrl: "",
+    bannerPhotoUrl: "",
     locationCity: "",
     locationState: "",
     phone: "",
@@ -66,14 +69,14 @@ export function ConsumerRegistrationSteps({ onSubmit, isLoading }: ConsumerRegis
       if (!formData.lastName.trim()) {
         newErrors.lastName = "Last name is required";
       }
-    } else if (step === 3) {
+    } else if (step === 4) {
       if (!formData.locationCity.trim()) {
         newErrors.locationCity = "City is required";
       }
       if (!formData.locationState.trim()) {
         newErrors.locationState = "State/Province is required";
       }
-    } else if (step === 4) {
+    } else if (step === 5) {
       if (!formData.email.trim()) {
         newErrors.email = "Email is required";
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
@@ -188,6 +191,22 @@ export function ConsumerRegistrationSteps({ onSubmit, isLoading }: ConsumerRegis
       case 3:
         return (
           <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Banner Photo (Optional)</Label>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Add a cover photo to personalize your profile
+              </p>
+              <ImageUpload
+                value={formData.bannerPhotoUrl}
+                onChange={(value) => updateFormData("bannerPhotoUrl", value)}
+              />
+            </div>
+          </div>
+        );
+
+      case 4:
+        return (
+          <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="locationCity">City *</Label>
@@ -230,7 +249,7 @@ export function ConsumerRegistrationSteps({ onSubmit, isLoading }: ConsumerRegis
           </div>
         );
 
-      case 4:
+      case 5:
         return (
           <div className="space-y-4">
             <div className="space-y-2">

@@ -11,22 +11,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json().catch(() => null);
-    const photoData = body?.photoData;
+    const body = await request.json();
+    const { bannerUrl } = body;
 
-    if (!photoData || typeof photoData !== "string") {
-      return NextResponse.json({ error: "Photo data is required" }, { status: 400 });
+    if (!bannerUrl || typeof bannerUrl !== "string") {
+      return NextResponse.json({ error: "Banner URL is required" }, { status: 400 });
     }
 
     const updatedAccount = await prisma.account.update({
       where: { id: user.id },
-      data: { profilePhotoUrl: photoData },
+      data: { bannerPhotoUrl: bannerUrl },
     });
 
-    return NextResponse.json({ success: true, profilePhotoUrl: updatedAccount.profilePhotoUrl });
+    return NextResponse.json({ success: true, bannerPhotoUrl: updatedAccount.bannerPhotoUrl });
   } catch (error) {
-    console.error("Error updating profile photo:", error);
-    return NextResponse.json({ error: "Failed to update profile photo" }, { status: 500 });
+    console.error("Error updating banner photo:", error);
+    return NextResponse.json({ error: "Failed to update banner photo" }, { status: 500 });
   }
 }
 
@@ -40,12 +40,12 @@ export async function DELETE(request: Request) {
 
     await prisma.account.update({
       where: { id: user.id },
-      data: { profilePhotoUrl: null },
+      data: { bannerPhotoUrl: null },
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error removing profile photo:", error);
-    return NextResponse.json({ error: "Failed to remove profile photo" }, { status: 500 });
+    console.error("Error removing banner photo:", error);
+    return NextResponse.json({ error: "Failed to remove banner photo" }, { status: 500 });
   }
 }
