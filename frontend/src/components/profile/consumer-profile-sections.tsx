@@ -5,28 +5,19 @@ import {
   Heart, 
   Clock, 
   Star, 
-  Settings, 
-  Shield, 
-  Bell,
   Briefcase,
   MapPin,
   DollarSign,
-  Video,
   CheckCircle,
-  Mail,
-  Phone,
-  Eye,
-  EyeOff,
   Calendar,
   MessageSquare,
-  TrendingUp
+  TrendingUp,
+  Award
 } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import type { ConsumerProfile } from "@/types";
 
 type ConsumerProfileSectionsProps = {
@@ -48,19 +39,7 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
   const [savedProfessionals, setSavedProfessionals] = useState<any[]>([]);
   const [activityHistory, setActivityHistory] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
-  const [preferences, setPreferences] = useState({
-    consultationPreference: profile.consultationPreference || "both",
-    budgetMin: profile.budgetMin || 0,
-    budgetMax: profile.budgetMax || 500,
-    distancePreference: profile.distancePreference || 25,
-  });
-  const [notifications, setNotifications] = useState({
-    newProfessionals: true,
-    savedUpdates: true,
-    consultationReminders: true,
-    messageNotifications: true,
-    reviewResponses: true,
-  });
+  const [recommendations, setRecommendations] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -70,6 +49,8 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
       fetchActivityHistory();
     } else if (activeTab === "reviews") {
       fetchReviews();
+    } else if (activeTab === "recommendations") {
+      fetchRecommendations();
     }
   }, [activeTab]);
 
@@ -112,6 +93,26 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
     }
   };
 
+  const fetchRecommendations = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/profile/${profile.id}/recommendations`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch recommendations (${response.status})`);
+      }
+
+      const contentType = response.headers.get("content-type") ?? "";
+      const data = contentType.includes("application/json") ? await response.json() : {};
+      setRecommendations(Array.isArray(data.recommendations) ? data.recommendations : []);
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+      setRecommendations([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const toggleServiceInterest = async (serviceId: string) => {
     const updated = serviceInterests.includes(serviceId)
       ? serviceInterests.filter(id => id !== serviceId)
@@ -130,33 +131,6 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
     }
   };
 
-  const updatePreferences = async () => {
-    try {
-      await fetch("/api/profile/preferences", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(preferences),
-      });
-    } catch (error) {
-      console.error("Error updating preferences:", error);
-    }
-  };
-
-  const updateNotifications = async (key: string, value: boolean) => {
-    const updated = { ...notifications, [key]: value };
-    setNotifications(updated);
-    
-    try {
-      await fetch("/api/profile/preferences", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notificationPreferences: updated }),
-      });
-    } catch (error) {
-      console.error("Error updating notifications:", error);
-    }
-  };
-
   return (
     <div className="space-y-6">
       {/* Needs Help With Section */}
@@ -166,7 +140,7 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
             <Briefcase className="h-5 w-5 text-cyan-600" />
             What I Need Help With
           </CardTitle>
-          <p className="text-sm text-slate-600">Select services you're interested in to get personalized recommendations</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Select services you're interested in to get personalized recommendations</p>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -180,17 +154,17 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
                   onClick={() => toggleServiceInterest(category.id)}
                   className={`flex items-start gap-3 rounded-lg border p-4 text-left transition-all ${
                     isSelected
-                      ? "border-cyan-300 bg-cyan-50 shadow-sm"
-                      : "border-slate-200 bg-white hover:border-cyan-200 hover:bg-slate-50"
+                      ? "border-cyan-300 dark:border-cyan-700 bg-cyan-50 dark:bg-cyan-950/30 shadow-sm"
+                      : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-cyan-200 dark:hover:border-cyan-700 hover:bg-slate-50 dark:hover:bg-slate-700"
                   }`}
                 >
                   <div className={`mt-0.5 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${
-                    isSelected ? "bg-cyan-100" : "bg-slate-100"
+                    isSelected ? "bg-cyan-100 dark:bg-cyan-900" : "bg-slate-100 dark:bg-slate-700"
                   }`}>
-                    <Icon className={`h-5 w-5 ${isSelected ? "text-cyan-600" : "text-slate-600"}`} />
+                    <Icon className={`h-5 w-5 ${isSelected ? "text-cyan-600 dark:text-cyan-400" : "text-slate-600 dark:text-slate-400"}`} />
                   </div>
                   <div className="flex-1">
-                    <h3 className={`font-medium ${isSelected ? "text-cyan-900" : "text-slate-900"}`}>
+                    <h3 className={`font-medium ${isSelected ? "text-cyan-900 dark:text-cyan-100" : "text-slate-900 dark:text-white"}`}>
                       {category.label}
                     </h3>
                     {isSelected && (
@@ -205,14 +179,14 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
       </Card>
 
       {/* Tab Navigation */}
-      <div className="border-b border-slate-200">
+      <div className="border-b border-slate-200 dark:border-slate-700">
         <nav className="flex gap-8" aria-label="Profile sections">
           <button
             onClick={() => setActiveTab("saved")}
             className={`border-b-2 py-4 text-sm font-medium transition-colors ${
               activeTab === "saved"
                 ? "border-cyan-600 text-cyan-600"
-                : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -225,7 +199,7 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
             className={`border-b-2 py-4 text-sm font-medium transition-colors ${
               activeTab === "activity"
                 ? "border-cyan-600 text-cyan-600"
-                : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -238,7 +212,7 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
             className={`border-b-2 py-4 text-sm font-medium transition-colors ${
               activeTab === "reviews"
                 ? "border-cyan-600 text-cyan-600"
-                : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -247,42 +221,16 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
             </div>
           </button>
           <button
-            onClick={() => setActiveTab("preferences")}
+            onClick={() => setActiveTab("recommendations")}
             className={`border-b-2 py-4 text-sm font-medium transition-colors ${
-              activeTab === "preferences"
+              activeTab === "recommendations"
                 ? "border-cyan-600 text-cyan-600"
-                : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <div className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              <span>Preferences</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab("security")}
-            className={`border-b-2 py-4 text-sm font-medium transition-colors ${
-              activeTab === "security"
-                ? "border-cyan-600 text-cyan-600"
-                : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              <span>Security</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab("notifications")}
-            className={`border-b-2 py-4 text-sm font-medium transition-colors ${
-              activeTab === "notifications"
-                ? "border-cyan-600 text-cyan-600"
-                : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Bell className="h-4 w-4" />
-              <span>Notifications</span>
+              <Award className="h-4 w-4" />
+              <span>My Recommendations</span>
             </div>
           </button>
         </nav>
@@ -312,22 +260,10 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
           />
         )}
         
-        {activeTab === "preferences" && (
-          <PreferencesSection 
-            preferences={preferences}
-            setPreferences={setPreferences}
-            onSave={updatePreferences}
-          />
-        )}
-        
-        {activeTab === "security" && (
-          <SecuritySection profile={profile} />
-        )}
-        
-        {activeTab === "notifications" && (
-          <NotificationsSection 
-            notifications={notifications}
-            onUpdate={updateNotifications}
+        {activeTab === "recommendations" && (
+          <RecommendationsSection 
+            recommendations={recommendations} 
+            isLoading={isLoading}
           />
         )}
       </div>
@@ -348,8 +284,8 @@ function SavedProfessionalsSection({ professionals, isLoading, onRefresh }: any)
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <Heart className="mx-auto h-12 w-12 text-slate-400" />
-          <p className="mt-4 text-slate-600">No saved professionals yet</p>
+          <Heart className="mx-auto h-12 w-12 text-slate-400 dark:text-slate-600" />
+          <p className="mt-4 text-slate-600 dark:text-slate-400">No saved professionals yet</p>
           <Link href="/lawyers">
             <Button className="mt-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700">
               Browse Professionals
@@ -380,11 +316,11 @@ function SavedProfessionalsSection({ professionals, isLoading, onRefresh }: any)
                 )}
                 <div className="flex-1 min-w-0">
                   <Link href={`/professionals/${fav.professionalProfile?.accountId}`}>
-                    <h3 className="font-semibold text-slate-900 hover:text-cyan-600 truncate">
+                    <h3 className="font-semibold text-slate-900 dark:text-white hover:text-cyan-600 dark:hover:text-cyan-400 truncate">
                       {fullName}
                     </h3>
                   </Link>
-                  <p className="text-sm text-slate-600">{fav.professionalProfile?.profession}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">{fav.professionalProfile?.profession}</p>
                   <div className="mt-2 flex gap-2">
                     <Button size="sm" variant="outline" className="text-xs">
                       <MessageSquare className="mr-1 h-3 w-3" />
@@ -418,8 +354,8 @@ function ActivityHistorySection({ activities, isLoading }: any) {
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <Clock className="mx-auto h-12 w-12 text-slate-400" />
-          <p className="mt-4 text-slate-600">No activity yet</p>
+          <Clock className="mx-auto h-12 w-12 text-slate-400 dark:text-slate-600" />
+          <p className="mt-4 text-slate-600 dark:text-slate-400">No activity yet</p>
         </CardContent>
       </Card>
     );
@@ -430,22 +366,22 @@ function ActivityHistorySection({ activities, isLoading }: any) {
       <CardContent className="p-6">
         <div className="space-y-4">
           {activities.map((activity: any) => (
-            <div key={activity.id} className="flex gap-4 border-b border-slate-100 pb-4 last:border-0">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-cyan-100">
+            <div key={activity.id} className="flex gap-4 border-b border-slate-100 dark:border-slate-700 pb-4 last:border-0">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-cyan-100 dark:bg-cyan-900">
                 <Clock className="h-5 w-5 text-cyan-600" />
               </div>
               <div className="flex-1">
-                <p className="text-sm text-slate-900">
+                <p className="text-sm text-slate-900 dark:text-white">
                   {activity.activityType.replace(/_/g, " ")}
                 </p>
                 {activity.professional && (
                   <Link href={`/professionals/${activity.professional.accountId}`}>
-                    <p className="text-sm text-cyan-600 hover:text-cyan-700">
+                    <p className="text-sm text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300">
                       {activity.professional.name}
                     </p>
                   </Link>
                 )}
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   {new Date(activity.createdAt).toLocaleDateString()}
                 </p>
               </div>
@@ -470,8 +406,8 @@ function ReviewsSection({ reviews, isLoading }: any) {
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <Star className="mx-auto h-12 w-12 text-slate-400" />
-          <p className="mt-4 text-slate-600">No reviews written yet</p>
+          <Star className="mx-auto h-12 w-12 text-slate-400 dark:text-slate-600" />
+          <p className="mt-4 text-slate-600 dark:text-slate-400">No reviews written yet</p>
         </CardContent>
       </Card>
     );
@@ -485,27 +421,27 @@ function ReviewsSection({ reviews, isLoading }: any) {
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
                 <Link href={`/professionals/${review.professional.accountId}`}>
-                  <h3 className="font-semibold text-slate-900 hover:text-cyan-600">
+                  <h3 className="font-semibold text-slate-900 dark:text-white hover:text-cyan-600 dark:hover:text-cyan-400">
                     {review.professional.name}
                   </h3>
                 </Link>
-                <p className="text-sm text-slate-600">{review.professional.profession}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">{review.professional.profession}</p>
               </div>
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
                     className={`h-4 w-4 ${
-                      i < review.rating ? "fill-amber-400 text-amber-400" : "text-slate-300"
+                      i < review.rating ? "fill-amber-400 text-amber-400" : "text-slate-300 dark:text-slate-600"
                     }`}
                   />
                 ))}
               </div>
             </div>
             {review.comment && (
-              <p className="mt-3 text-sm text-slate-700">{review.comment}</p>
+              <p className="mt-3 text-sm text-slate-700 dark:text-slate-300">{review.comment}</p>
             )}
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
               {new Date(review.createdAt).toLocaleDateString()}
             </p>
           </CardContent>
@@ -515,226 +451,55 @@ function ReviewsSection({ reviews, isLoading }: any) {
   );
 }
 
-function PreferencesSection({ preferences, setPreferences, onSave }: any) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Search & Consultation Preferences</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div>
-          <Label className="text-sm font-semibold text-slate-700">Consultation Type</Label>
-          <div className="mt-2 flex gap-3">
-            {["virtual", "in-person", "both"].map((type) => (
-              <button
-                key={type}
-                onClick={() => setPreferences({ ...preferences, consultationPreference: type })}
-                className={`rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
-                  preferences.consultationPreference === type
-                    ? "border-cyan-600 bg-cyan-50 text-cyan-700"
-                    : "border-slate-200 bg-white text-slate-700 hover:border-cyan-200"
-                }`}
-              >
-                {type === "virtual" && <Video className="mr-2 inline h-4 w-4" />}
-                {type === "in-person" && <MapPin className="mr-2 inline h-4 w-4" />}
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
+function RecommendationsSection({ recommendations, isLoading }: any) {
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-cyan-600 border-t-transparent"></div>
+      </div>
+    );
+  }
 
-        <div>
-          <Label className="text-sm font-semibold text-slate-700">Budget Range (per hour)</Label>
-          <div className="mt-2 grid grid-cols-2 gap-4">
-            <div>
-              <Label className="text-xs text-slate-600">Minimum</Label>
-              <div className="mt-1 flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-slate-400" />
-                <input
-                  type="number"
-                  value={preferences.budgetMin}
-                  onChange={(e) => setPreferences({ ...preferences, budgetMin: parseInt(e.target.value) })}
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                />
+  if (recommendations.length === 0) {
+    return (
+      <Card>
+        <CardContent className="py-12 text-center">
+          <Award className="mx-auto h-12 w-12 text-slate-400 dark:text-slate-600" />
+          <p className="mt-4 text-slate-600 dark:text-slate-400">No recommendations yet</p>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Recommend professionals you've worked with to help others</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {recommendations.map((recommendation: any) => (
+        <Card key={recommendation.id}>
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
+                <Award className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div className="flex-1">
+                <Link href={`/professionals/${recommendation.professional.accountId}`}>
+                  <h3 className="font-semibold text-slate-900 dark:text-white hover:text-cyan-600 dark:hover:text-cyan-400">
+                    {recommendation.professional.name}
+                  </h3>
+                </Link>
+                <p className="text-sm text-slate-600 dark:text-slate-400">{recommendation.professional.profession}</p>
+                {recommendation.comment && (
+                  <p className="mt-3 text-sm text-slate-700 dark:text-slate-300">{recommendation.comment}</p>
+                )}
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                  Recommended on {new Date(recommendation.createdAt).toLocaleDateString()}
+                </p>
               </div>
             </div>
-            <div>
-              <Label className="text-xs text-slate-600">Maximum</Label>
-              <div className="mt-1 flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-slate-400" />
-                <input
-                  type="number"
-                  value={preferences.budgetMax}
-                  onChange={(e) => setPreferences({ ...preferences, budgetMax: parseInt(e.target.value) })}
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <Label className="text-sm font-semibold text-slate-700">Distance Preference (miles)</Label>
-          <div className="mt-2">
-            <input
-              type="range"
-              min="5"
-              max="100"
-              value={preferences.distancePreference}
-              onChange={(e) => setPreferences({ ...preferences, distancePreference: parseInt(e.target.value) })}
-              className="w-full"
-            />
-            <p className="mt-1 text-sm text-slate-600">{preferences.distancePreference} miles</p>
-          </div>
-        </div>
-
-        <Button onClick={onSave} className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700">
-          Save Preferences
-        </Button>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   );
 }
 
-function SecuritySection({ profile }: { profile: ConsumerProfile }) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Security & Verification</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between rounded-lg border border-slate-200 p-4">
-          <div className="flex items-center gap-3">
-            <div className={`flex h-10 w-10 items-center justify-center rounded-full ${
-              profile.emailVerified ? "bg-green-100" : "bg-slate-100"
-            }`}>
-              <Mail className={`h-5 w-5 ${profile.emailVerified ? "text-green-600" : "text-slate-600"}`} />
-            </div>
-            <div>
-              <p className="font-medium text-slate-900">Email Verification</p>
-              <p className="text-sm text-slate-600">
-                {profile.emailVerified ? "Verified" : "Not verified"}
-              </p>
-            </div>
-          </div>
-          {!profile.emailVerified && (
-            <Button size="sm" variant="outline">Verify Email</Button>
-          )}
-          {profile.emailVerified && (
-            <CheckCircle className="h-6 w-6 text-green-600" />
-          )}
-        </div>
-
-        <div className="flex items-center justify-between rounded-lg border border-slate-200 p-4">
-          <div className="flex items-center gap-3">
-            <div className={`flex h-10 w-10 items-center justify-center rounded-full ${
-              profile.phoneVerified ? "bg-green-100" : "bg-slate-100"
-            }`}>
-              <Phone className={`h-5 w-5 ${profile.phoneVerified ? "text-green-600" : "text-slate-600"}`} />
-            </div>
-            <div>
-              <p className="font-medium text-slate-900">Phone Verification</p>
-              <p className="text-sm text-slate-600">
-                {profile.phoneVerified ? "Verified" : "Not verified"}
-              </p>
-            </div>
-          </div>
-          {!profile.phoneVerified && (
-            <Button size="sm" variant="outline">Verify Phone</Button>
-          )}
-          {profile.phoneVerified && (
-            <CheckCircle className="h-6 w-6 text-green-600" />
-          )}
-        </div>
-
-        <div className="flex items-center justify-between rounded-lg border border-slate-200 p-4">
-          <div className="flex items-center gap-3">
-            <div className={`flex h-10 w-10 items-center justify-center rounded-full ${
-              profile.identityVerified ? "bg-green-100" : "bg-slate-100"
-            }`}>
-              <Shield className={`h-5 w-5 ${profile.identityVerified ? "text-green-600" : "text-slate-600"}`} />
-            </div>
-            <div>
-              <p className="font-medium text-slate-900">Identity Verification</p>
-              <p className="text-sm text-slate-600">
-                {profile.identityVerified ? "Verified" : "Optional"}
-              </p>
-            </div>
-          </div>
-          {!profile.identityVerified && (
-            <Button size="sm" variant="outline">Verify Identity</Button>
-          )}
-          {profile.identityVerified && (
-            <CheckCircle className="h-6 w-6 text-green-600" />
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function NotificationsSection({ notifications, onUpdate }: any) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Notification Preferences</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-slate-900">New Professionals in Area</p>
-            <p className="text-sm text-slate-600">Get notified when new professionals join near you</p>
-          </div>
-          <Switch
-            checked={notifications.newProfessionals}
-            onCheckedChange={(checked) => onUpdate("newProfessionals", checked)}
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-slate-900">Updates from Saved Professionals</p>
-            <p className="text-sm text-slate-600">Receive updates from professionals you've saved</p>
-          </div>
-          <Switch
-            checked={notifications.savedUpdates}
-            onCheckedChange={(checked) => onUpdate("savedUpdates", checked)}
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-slate-900">Consultation Reminders</p>
-            <p className="text-sm text-slate-600">Reminders for upcoming consultations</p>
-          </div>
-          <Switch
-            checked={notifications.consultationReminders}
-            onCheckedChange={(checked) => onUpdate("consultationReminders", checked)}
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-slate-900">Message Notifications</p>
-            <p className="text-sm text-slate-600">Get notified when you receive messages</p>
-          </div>
-          <Switch
-            checked={notifications.messageNotifications}
-            onCheckedChange={(checked) => onUpdate("messageNotifications", checked)}
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-slate-900">Review Responses</p>
-            <p className="text-sm text-slate-600">Notifications when professionals respond to your reviews</p>
-          </div>
-          <Switch
-            checked={notifications.reviewResponses}
-            onCheckedChange={(checked) => onUpdate("reviewResponses", checked)}
-          />
-        </div>
-      </CardContent>
-    </Card>
-  );
-}

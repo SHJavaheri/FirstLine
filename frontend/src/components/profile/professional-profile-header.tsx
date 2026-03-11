@@ -1,20 +1,26 @@
 "use client";
 
-import { Star, MapPin, Briefcase, CheckCircle, Globe, Phone, Mail, MessageSquare, Calendar, Heart, Image, Camera } from "lucide-react";
+import { Star, MapPin, Briefcase, CheckCircle, Globe, Phone, Mail, MessageSquare, Calendar, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EditProfessionalProfileDialog } from "@/components/profile/edit-professional-profile-dialog";
 import { ProfileBannerUpload } from "@/components/profile/profile-banner-upload";
 import { ProfilePhotoUpload } from "@/components/profile/profile-photo-upload";
+import { ConnectionsStats } from "@/components/friends/connections-stats";
+import { FavoriteButton } from "@/components/lawyers/favorite-button";
+import { RecommendButton } from "@/components/recommendations/recommend-button";
+import { RatingDialog } from "@/components/ratings/rating-dialog";
 import type { ProfessionalProfileView } from "@/backend/repositories/professional-repository";
 
 type ProfessionalProfileHeaderProps = {
   profile: ProfessionalProfileView;
   isSelf: boolean;
   isConsumer: boolean;
+  followingCount?: number;
+  followersCount?: number;
 };
 
-export function ProfessionalProfileHeader({ profile, isSelf, isConsumer }: ProfessionalProfileHeaderProps) {
+export function ProfessionalProfileHeader({ profile, isSelf, isConsumer, followingCount = 0, followersCount = 0 }: ProfessionalProfileHeaderProps) {
   const displayName = [profile.account.firstName, profile.account.lastName]
     .filter(Boolean)
     .join(" ") || "Professional";
@@ -26,7 +32,7 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer }: Profe
   const memberSince = new Date(profile.account.createdAt).getFullYear();
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
       {isSelf ? (
         <ProfileBannerUpload 
           currentBannerUrl={profile.account.bannerPhotoUrl} 
@@ -66,7 +72,7 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer }: Profe
                     </div>
                   )}
                   {profile.verified && (
-                    <div className="absolute bottom-2 right-2 rounded-full bg-white p-1 shadow-md">
+                    <div className="absolute bottom-2 right-2 rounded-full bg-white dark:bg-slate-800 p-1 shadow-md">
                       <CheckCircle className="h-6 w-6 fill-blue-600 text-white" />
                     </div>
                   )}
@@ -92,7 +98,7 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer }: Profe
                   </div>
                 )}
                 {profile.verified && (
-                  <div className="absolute bottom-2 right-2 rounded-full bg-white p-1 shadow-md">
+                  <div className="absolute bottom-2 right-2 rounded-full bg-white dark:bg-slate-800 p-1 shadow-md">
                     <CheckCircle className="h-6 w-6 fill-blue-600 text-white" />
                   </div>
                 )}
@@ -104,8 +110,8 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer }: Profe
             <div>
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
                 <div className="flex-1 min-w-0 space-y-2">
-                  <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">{displayName}</h1>
-                  <p className="mt-1 text-lg font-medium text-slate-700">{profile.profession}</p>
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">{displayName}</h1>
+                  <p className="mt-1 text-lg font-medium text-slate-700 dark:text-slate-300">{profile.profession}</p>
                   
                   {profile.firmName && (
                     <div className="mt-2 flex items-center gap-2 text-slate-600">
@@ -124,14 +130,33 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer }: Profe
 
                 {isSelf ? (
                   <div className="flex flex-wrap items-center justify-start gap-2 sm:justify-end">
-                    <EditProfessionalProfileDialog profile={profile} />
+                    <EditProfessionalProfileDialog profile={{
+                      bio: profile.account.bio,
+                      professionalBio: profile.professionalBio,
+                      hourlyRate: profile.hourlyRate,
+                      minRate: profile.minRate,
+                      maxRate: profile.maxRate,
+                      pricingModel: profile.pricingModel,
+                      pricingDetails: profile.pricingDetails,
+                      acceptsNewClients: profile.acceptsNewClients,
+                      offersInPerson: profile.offersInPerson,
+                      offersRemote: profile.offersRemote,
+                    }} />
                   </div>
                 ) : isConsumer ? (
                   <div className="flex flex-wrap items-center justify-start gap-2 sm:justify-end sm:gap-3">
-                    <Button size="sm" variant="outline" className="gap-2 px-4">
-                      <Heart className="h-4 w-4" />
-                      Save
-                    </Button>
+                    <div className="flex items-center gap-1">
+                      <FavoriteButton professionalAccountId={profile.accountId} />
+                      <RecommendButton
+                        professionalAccountId={profile.accountId}
+                        professionalName={displayName}
+                        profession={profile.profession}
+                      />
+                    </div>
+                    <RatingDialog
+                      professionalAccountId={profile.accountId}
+                      professionalName={displayName}
+                    />
                     <Button size="sm" variant="outline" className="gap-2 px-4">
                       <MessageSquare className="h-4 w-4" />
                       Message
@@ -157,14 +182,21 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer }: Profe
                 )}
               </div>
 
-              {(profile.professionalBio || profile.description || profile.account.bio) && (
+              {profile.account.bio && (
                 <p className="mt-4 text-sm leading-relaxed text-slate-700 line-clamp-2">
-                  {profile.professionalBio || profile.description || profile.account.bio}
+                  {profile.account.bio}
                 </p>
               )}
             </div>
 
             <div className="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-slate-100 pt-4 text-sm">
+              <ConnectionsStats
+                accountId={profile.accountId}
+                followingCount={followingCount}
+                followersCount={followersCount}
+                ratingsCount={profile.reviewCount}
+              />
+              
               <div className="flex items-center gap-2">
                 <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
                 <span className="font-semibold text-slate-900">{profile.rating.toFixed(1)}</span>

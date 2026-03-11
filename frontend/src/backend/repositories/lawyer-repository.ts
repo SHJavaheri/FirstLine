@@ -44,13 +44,19 @@ export async function listProfessionalProfiles(filters: LawyerSearchFilters) {
 
   if (typeof filters.minRate === "number") {
     andFilters.push({
-      hourlyRate: { gte: filters.minRate },
+      OR: [
+        { hourlyRate: { gte: filters.minRate } },
+        { minRate: { gte: filters.minRate } },
+      ],
     });
   }
 
   if (typeof filters.maxRate === "number") {
     andFilters.push({
-      hourlyRate: { lte: filters.maxRate },
+      OR: [
+        { hourlyRate: { lte: filters.maxRate } },
+        { maxRate: { lte: filters.maxRate } },
+      ],
     });
   }
 

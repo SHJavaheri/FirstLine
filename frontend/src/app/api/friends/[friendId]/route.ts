@@ -10,7 +10,7 @@ export async function GET(
   try {
     const user = await getCurrentUser();
 
-    if (!user || user.role !== "CONSUMER") {
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -31,7 +31,7 @@ export async function DELETE(
   try {
     const user = await getCurrentUser();
 
-    if (!user || user.role !== "CONSUMER") {
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

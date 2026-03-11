@@ -12,6 +12,7 @@ type NotificationWithDestination = {
   isRead: boolean;
   createdAt: Date;
   destinationProfileId: string | null;
+  destinationAccountId: string | null;
 };
 
 export async function createNotification(
@@ -55,20 +56,36 @@ export async function getNotifications(userId: string, unreadOnly = false) {
     ratingIds.length > 0
       ? prisma.rating.findMany({
           where: { id: { in: ratingIds } },
-          select: { id: true, professionalProfileId: true },
+          select: { 
+            id: true, 
+            professionalProfileId: true,
+            professionalProfile: {
+              select: { accountId: true }
+            }
+          },
         })
       : Promise.resolve([]),
     recommendationIds.length > 0
       ? prisma.personalRecommendation.findMany({
           where: { id: { in: recommendationIds } },
-          select: { id: true, professionalProfileId: true },
+          select: { 
+            id: true, 
+            professionalProfileId: true,
+            professionalProfile: {
+              select: { accountId: true }
+            }
+          },
         })
       : Promise.resolve([]),
   ]);
 
   const ratingDestinationMap = new Map(ratings.map((rating) => [rating.id, rating.professionalProfileId]));
+  const ratingAccountMap = new Map(ratings.map((rating) => [rating.id, rating.professionalProfile.accountId]));
   const recommendationDestinationMap = new Map(
     recommendations.map((recommendation) => [recommendation.id, recommendation.professionalProfileId])
+  );
+  const recommendationAccountMap = new Map(
+    recommendations.map((recommendation) => [recommendation.id, recommendation.professionalProfile.accountId])
   );
 
   return notifications.map<NotificationWithDestination>((notification) => ({
@@ -78,6 +95,12 @@ export async function getNotifications(userId: string, unreadOnly = false) {
         ? ratingDestinationMap.get(notification.relatedId) ?? null
         : notification.type === "RECOMMENDATION_RECEIVED"
         ? recommendationDestinationMap.get(notification.relatedId) ?? null
+        : null,
+    destinationAccountId:
+      notification.type === "RATING_RECEIVED"
+        ? ratingAccountMap.get(notification.relatedId) ?? null
+        : notification.type === "RECOMMENDATION_RECEIVED"
+        ? recommendationAccountMap.get(notification.relatedId) ?? null
         : null,
   }));
 }

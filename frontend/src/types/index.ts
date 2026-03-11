@@ -148,6 +148,11 @@ export type ConsumerSearchResult = {
   isFriend: boolean;
   pendingRequest: "sent" | "received" | null;
   profession?: string | null;
+  hourlyRate?: number | null;
+  minRate?: number | null;
+  maxRate?: number | null;
+  pricingModel?: string | null;
+  pricingDetails?: string | null;
 };
 
 export type ConsumerProfile = {

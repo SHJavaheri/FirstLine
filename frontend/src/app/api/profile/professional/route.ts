@@ -16,6 +16,7 @@ export async function PATCH(request: Request) {
 
     const body = await request.json();
     const {
+      bio,
       professionalBio,
       hourlyRate,
       minRate,
@@ -27,6 +28,15 @@ export async function PATCH(request: Request) {
       offersRemote,
     } = body;
 
+    // Update bio in Account table if provided
+    if (bio !== undefined) {
+      await prisma.account.update({
+        where: { id: user.id },
+        data: { bio },
+      });
+    }
+
+    // Update professional profile fields
     const updatedProfile = await prisma.professionalProfile.update({
       where: { accountId: user.id },
       data: {

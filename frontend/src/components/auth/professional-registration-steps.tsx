@@ -486,15 +486,16 @@ export function ProfessionalRegistrationSteps({ onSubmit, isLoading }: Professio
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="professionalBio">Professional Bio (Optional)</Label>
+              <Label htmlFor="professionalBio">About / Professional Bio (Optional)</Label>
               <Textarea
                 id="professionalBio"
                 value={formData.professionalBio}
                 onChange={(e) => updateFormData("professionalBio", e.target.value)}
-                placeholder="Detailed description of your practice and expertise..."
+                placeholder="Detailed description of your practice, expertise, and what makes you unique..."
                 rows={3}
                 disabled={isLoading}
               />
+              <p className="text-xs text-slate-500">This will be displayed in your About section (separate from your short bio)</p>
             </div>
           </div>
         );
