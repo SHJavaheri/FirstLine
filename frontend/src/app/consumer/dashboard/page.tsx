@@ -41,8 +41,8 @@ export default async function ConsumerDashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold text-slate-900">3</p>
-            <p className="text-sm text-slate-600">Alerts ready for Family Law in Ontario.</p>
+            <p className="text-2xl font-semibold text-slate-900 dark:text-white">3</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Alerts ready for Family Law in Ontario.</p>
           </CardContent>
         </Card>
         <Card>
@@ -53,8 +53,8 @@ export default async function ConsumerDashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold text-slate-900">2</p>
-            <p className="text-sm text-slate-600">Professionals responded within the last 24 hours.</p>
+            <p className="text-2xl font-semibold text-slate-900 dark:text-white">2</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Professionals responded within the last 24 hours.</p>
           </CardContent>
         </Card>
         <Card>
@@ -65,8 +65,8 @@ export default async function ConsumerDashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold text-slate-900">82%</p>
-            <p className="text-sm text-slate-600">Add your profile photo to build more trust.</p>
+            <p className="text-2xl font-semibold text-slate-900 dark:text-white">82%</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Add your profile photo to build more trust.</p>
           </CardContent>
         </Card>
       </div>
@@ -77,7 +77,7 @@ export default async function ConsumerDashboardPage() {
           <Badge variant="secondary">Consumer</Badge>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-slate-700">
+          <p className="text-sm text-slate-700 dark:text-slate-300">
             Explore verified professionals, shortlist profiles, and start a secure inquiry from one place.
           </p>
           <Button asChild>

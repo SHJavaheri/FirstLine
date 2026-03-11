@@ -106,7 +106,7 @@ export function ConsumerSearchResults({
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent mx-auto"></div>
-          <p className="mt-4 text-sm text-slate-600">Searching for consumers...</p>
+          <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">Searching for consumers...</p>
         </div>
       </div>
     );
@@ -114,17 +114,17 @@ export function ConsumerSearchResults({
 
   if (error) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-        <p className="text-sm text-red-800">{error}</p>
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center dark:border-red-900 dark:bg-red-950">
+        <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
       </div>
     );
   }
 
   if (consumers.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center">
-        <h2 className="text-xl font-semibold text-slate-900">No consumers found</h2>
-        <p className="mt-2 text-sm text-slate-600">
+      <div className="rounded-xl border border-dashed border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-10 text-center">
+        <h2 className="text-xl font-semibold text-slate-900 dark:text-white">No consumers found</h2>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
           Try adjusting your search filters or browse without filters to see all consumers.
         </p>
       </div>
@@ -133,7 +133,7 @@ export function ConsumerSearchResults({
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-slate-600">
+      <p className="text-sm text-slate-600 dark:text-slate-400">
         Found {consumers.length} consumer{consumers.length !== 1 ? "s" : ""}
       </p>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

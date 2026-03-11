@@ -102,19 +102,19 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
   return (
     <div className="space-y-6">
       {/* Received Requests */}
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-semibold text-slate-900 mb-4">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm">
+        <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
           Received Requests ({receivedRequests.length})
         </h2>
         
         {receivedRequests.length === 0 ? (
-          <p className="text-sm text-slate-600">No pending friend requests</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">No pending friend requests</p>
         ) : (
           <div className="space-y-4">
             {receivedRequests.map((request) => (
               <div
                 key={request.id}
-                className="flex items-center justify-between rounded-lg border border-slate-200 p-4"
+                className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 p-4"
               >
                 <div className="flex items-center gap-4">
                   <Link href={getProfileHref(request.sender)}>
@@ -125,19 +125,19 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                         className="h-12 w-12 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-200">
-                        <User className="h-6 w-6 text-slate-500" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
+                        <User className="h-6 w-6 text-slate-500 dark:text-slate-400" />
                       </div>
                     )}
                   </Link>
                   <div>
                     <Link
                       href={getProfileHref(request.sender)}
-                      className="font-medium text-slate-900 hover:text-blue-600"
+                      className="font-medium text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
                     >
                       {getDisplayNameWithProfession(request.sender)}
                     </Link>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
                       {new Date(request.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -154,7 +154,7 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                   <button
                     onClick={() => handleDecline(request.id)}
                     disabled={loadingId === request.id}
-                    className="flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                    className="flex items-center gap-1 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50"
                   >
                     <X className="h-4 w-4" />
                     Decline
@@ -167,19 +167,19 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
       </div>
 
       {/* Sent Requests */}
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-semibold text-slate-900 mb-4">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm">
+        <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
           Sent Requests ({sentRequests.length})
         </h2>
         
         {sentRequests.length === 0 ? (
-          <p className="text-sm text-slate-600">No pending sent requests</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">No pending sent requests</p>
         ) : (
           <div className="space-y-4">
             {sentRequests.map((request) => (
               <div
                 key={request.id}
-                className="flex items-center justify-between rounded-lg border border-slate-200 p-4"
+                className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 p-4"
               >
                 <div className="flex items-center gap-4">
                   <Link href={getProfileHref(request.receiver)}>
@@ -190,19 +190,19 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                         className="h-12 w-12 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-200">
-                        <User className="h-6 w-6 text-slate-500" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
+                        <User className="h-6 w-6 text-slate-500 dark:text-slate-400" />
                       </div>
                     )}
                   </Link>
                   <div>
                     <Link
                       href={getProfileHref(request.receiver)}
-                      className="font-medium text-slate-900 hover:text-blue-600"
+                      className="font-medium text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
                     >
                       {getDisplayName(request.receiver)}
                     </Link>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
                       Sent {new Date(request.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -210,7 +210,7 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                 <button
                   onClick={() => handleCancel(request.id)}
                   disabled={loadingId === request.id}
-                  className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                  className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50"
                 >
                   Cancel Request
                 </button>

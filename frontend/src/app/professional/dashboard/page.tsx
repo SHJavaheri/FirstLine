@@ -39,8 +39,8 @@ export default async function ProfessionalDashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold text-slate-900">7</p>
-            <p className="text-sm text-slate-600">3 marked high-priority this week.</p>
+            <p className="text-2xl font-semibold text-slate-900 dark:text-white">7</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">3 marked high-priority this week.</p>
           </CardContent>
         </Card>
         <Card>
@@ -51,8 +51,8 @@ export default async function ProfessionalDashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold text-slate-900">4</p>
-            <p className="text-sm text-slate-600">Next consultation in 2 hours.</p>
+            <p className="text-2xl font-semibold text-slate-900 dark:text-white">4</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Next consultation in 2 hours.</p>
           </CardContent>
         </Card>
         <Card>
@@ -63,8 +63,8 @@ export default async function ProfessionalDashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold text-emerald-700">Active</p>
-            <p className="text-sm text-slate-600">License and profile details are up to date.</p>
+            <p className="text-2xl font-semibold text-emerald-700 dark:text-emerald-400">Active</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">License and profile details are up to date.</p>
           </CardContent>
         </Card>
       </div>
@@ -74,7 +74,7 @@ export default async function ProfessionalDashboardPage() {
           <CardTitle>Profile health</CardTitle>
           <Badge>Professional</Badge>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm text-slate-700">
+        <CardContent className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
           <p>- Add case highlights to improve profile visibility.</p>
           <p>- Keep pricing details updated for better consumer conversion.</p>
           <p>- Respond within 4 hours to boost platform ranking.</p>

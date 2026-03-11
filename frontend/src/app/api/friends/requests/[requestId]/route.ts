@@ -14,8 +14,8 @@ export async function POST(
   try {
     const user = await getCurrentUser();
 
-    if (!user || user.role !== "CONSUMER") {
-      return NextResponse.json({ error: "Only consumers can manage friend requests" }, { status: 403 });
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
@@ -51,8 +51,8 @@ export async function DELETE(
   try {
     const user = await getCurrentUser();
 
-    if (!user || user.role !== "CONSUMER") {
-      return NextResponse.json({ error: "Only consumers can cancel friend requests" }, { status: 403 });
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { requestId } = await params;

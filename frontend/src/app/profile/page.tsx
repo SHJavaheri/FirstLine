@@ -11,6 +11,7 @@ import { ConsumerProfileSections } from "@/components/profile/consumer-profile-s
 import { ProfessionalProfileHeader } from "@/components/profile/professional-profile-header";
 import { ProfessionalProfileSections } from "@/components/profile/professional-profile-sections";
 import { ProfessionalProfileReviews } from "@/components/profile/professional-profile-reviews";
+import { prisma } from "@/database/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -22,9 +23,20 @@ export default async function ProfilePage() {
   }
 
   if (user.role === "PROFESSIONAL") {
-    const [professionalProfile, ratings] = await Promise.all([
+    const [professionalProfile, ratings, account] = await Promise.all([
       getProfessionalProfileByAccountId(user.id),
       getProfessionalRatings(user.id),
+      prisma.account.findUnique({
+        where: { id: user.id },
+        select: {
+          _count: {
+            select: {
+              friendships: true,
+              friendOf: true,
+            },
+          },
+        },
+      }),
     ]);
 
     if (!professionalProfile) {
@@ -47,11 +59,15 @@ export default async function ProfilePage() {
       createdAt: rating.createdAt,
       professionalReply: rating.professionalReply,
       consumer: {
+        id: rating.consumer.id,
         firstName: rating.consumer.firstName,
         lastName: rating.consumer.lastName,
         profilePhotoUrl: rating.consumer.profilePhotoUrl,
       },
     }));
+
+    const followingCount = account?._count.friendships || 0;
+    const followersCount = account?._count.friendOf || 0;
 
     return (
       <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
@@ -59,12 +75,15 @@ export default async function ProfilePage() {
           profile={professionalProfile} 
           isSelf={true}
           isConsumer={false}
+          followingCount={followingCount}
+          followersCount={followersCount}
         />
         <ProfessionalProfileSections profile={professionalProfile} />
         <ProfessionalProfileReviews
           reviews={reviewsWithConsumer}
           averageRating={professionalProfile.rating}
           totalReviews={professionalProfile.reviewCount}
+          isSelf={true}
         />
       </div>
     );

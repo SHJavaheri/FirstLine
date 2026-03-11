@@ -77,7 +77,12 @@ export default async function LawyersPage({
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {lawyers.map((lawyer) => (
-            <LawyerCard key={lawyer.id} lawyer={lawyer} showFavoriteButton={user?.role === "CONSUMER"} />
+            <LawyerCard 
+              key={lawyer.id} 
+              lawyer={lawyer} 
+              showFavoriteButton={user?.role === "CONSUMER"}
+              showRecommendButton={user?.role === "CONSUMER"}
+            />
           ))}
         </div>
       )}

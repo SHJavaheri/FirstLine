@@ -14,6 +14,7 @@ type Notification = {
   isRead: boolean;
   createdAt: Date;
   destinationProfileId: string | null;
+  destinationAccountId: string | null;
 };
 
 type FriendRequest = {
@@ -33,17 +34,20 @@ type FriendRequest = {
 export function NotificationBell() {
   const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [allNotifications, setAllNotifications] = useState<Notification[]>([]);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [hasViewed, setHasViewed] = useState(false);
+  const [displayLimit, setDisplayLimit] = useState(5);
+  const [deletingNotificationId, setDeletingNotificationId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [notifResponse, requestsResponse] = await Promise.all([
-          fetch("/api/notifications?unreadOnly=true"),
+          fetch("/api/notifications"),
           fetch("/api/friends/requests?type=received&status=PENDING"),
         ]);
 
@@ -51,11 +55,12 @@ export function NotificationBell() {
           const data = await notifResponse.json();
           const newNotifications = data.notifications || [];
           
-          if (newNotifications.length > notifications.length) {
+          if (newNotifications.length > allNotifications.length) {
             setHasViewed(false);
           }
           
-          setNotifications(newNotifications);
+          setAllNotifications(newNotifications);
+          setNotifications(newNotifications.slice(0, 10));
         }
 
         if (requestsResponse.ok) {
@@ -79,7 +84,7 @@ export function NotificationBell() {
     
     const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
-  }, [notifications.length, friendRequests.length]);
+  }, [allNotifications.length, friendRequests.length]);
 
   const handleAcceptFriend = async (requestId: string) => {
     setActionLoading(requestId);
@@ -146,7 +151,10 @@ export function NotificationBell() {
     setIsOpen(!isOpen);
   };
 
-  const totalUnread = notifications.length + friendRequests.length;
+  const unreadNotifications = allNotifications.filter(n => !n.isRead);
+  const totalUnread = unreadNotifications.length + friendRequests.length;
+  const displayedNotifications = notifications.slice(0, displayLimit);
+  const hasMore = allNotifications.length > displayLimit;
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -172,12 +180,12 @@ export function NotificationBell() {
   const getNotificationHref = (notification: Notification) => {
     switch (notification.type) {
       case "RATING_RECEIVED":
-        return notification.destinationProfileId
-          ? `/professionals/${notification.destinationProfileId}`
+        return notification.destinationAccountId
+          ? `/professionals/${notification.destinationAccountId}`
           : "/profile";
       case "RECOMMENDATION_RECEIVED":
-        return notification.destinationProfileId
-          ? `/professionals/${notification.destinationProfileId}`
+        return notification.destinationAccountId
+          ? `/professionals/${notification.destinationAccountId}`
           : "/profile";
       default:
         return "/profile";
@@ -196,10 +204,37 @@ export function NotificationBell() {
 
   const handleNotificationClick = async (notification: Notification) => {
     await markNotificationAsRead(notification.id);
-    setNotifications((prev) => prev.filter((item) => item.id !== notification.id));
     setIsOpen(false);
     router.push(getNotificationHref(notification));
     router.refresh();
+  };
+
+  const handleDeleteNotification = async (notificationId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDeletingNotificationId(notificationId);
+    try {
+      const response = await fetch(`/api/notifications/${notificationId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete notification");
+      }
+
+      setNotifications((prev) => prev.filter((item) => item.id !== notificationId));
+      setAllNotifications((prev) => prev.filter((item) => item.id !== notificationId));
+    } catch (error) {
+      console.error("Error deleting notification:", error);
+      alert("Failed to delete notification");
+    } finally {
+      setDeletingNotificationId(null);
+    }
+  };
+
+  const handleLoadMore = () => {
+    const newLimit = displayLimit + 5;
+    setDisplayLimit(newLimit);
+    setNotifications(allNotifications.slice(0, Math.min(newLimit, allNotifications.length)));
   };
 
   return (
@@ -232,9 +267,9 @@ export function NotificationBell() {
                 <div className="flex items-center justify-center py-8">
                   <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
                 </div>
-              ) : totalUnread === 0 ? (
+              ) : (friendRequests.length === 0 && notifications.length === 0) ? (
                 <div className="px-4 py-8 text-center">
-                  <p className="text-sm text-slate-600">No new notifications</p>
+                  <p className="text-sm text-slate-600">No notifications</p>
                 </div>
               ) : (
                 <div className="divide-y divide-slate-200">
@@ -294,28 +329,50 @@ export function NotificationBell() {
                     </div>
                   ))}
 
-                  {notifications.map((notification) => (
-                    <button
+                  {displayedNotifications.map((notification) => (
+                    <div
                       key={notification.id}
-                      type="button"
-                      onClick={() => void handleNotificationClick(notification)}
-                      className="block w-full p-4 text-left hover:bg-slate-50"
+                      className="group relative p-4 hover:bg-slate-50 transition-colors"
                     >
-                      <div className="flex items-start gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
-                          {getNotificationIcon(notification.type)}
+                      <button
+                        type="button"
+                        onClick={() => void handleNotificationClick(notification)}
+                        className="block w-full text-left"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
+                            {getNotificationIcon(notification.type)}
+                          </div>
+                          <div className="flex-1 min-w-0 pr-6">
+                            <p className="text-sm text-slate-900">
+                              {notification.message}
+                            </p>
+                            <p className="text-xs text-slate-500 mt-1">
+                              {new Date(notification.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-slate-900">
-                            {notification.message}
-                          </p>
-                          <p className="text-xs text-slate-500 mt-1">
-                            {new Date(notification.createdAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                    </button>
+                      </button>
+                      <button
+                        onClick={(e) => handleDeleteNotification(notification.id, e)}
+                        disabled={deletingNotificationId === notification.id}
+                        className="absolute top-3 right-3 rounded-full p-1 text-slate-400 hover:bg-slate-200 hover:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
+                        aria-label="Delete notification"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
                   ))}
+                  {hasMore && (
+                    <div className="p-3 border-t border-slate-200">
+                      <button
+                        onClick={handleLoadMore}
+                        className="w-full rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200 transition-colors"
+                      >
+                        View More
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

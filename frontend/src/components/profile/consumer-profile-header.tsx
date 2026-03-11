@@ -263,7 +263,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
                       </Button>
                     ) : profile.pendingRequest === "received" ? (
                       <Button
-                        onClick={() => router.push("/friends/requests")}
+                        onClick={() => router.push("/discover-friends?tab=requests")}
                         size="sm"
                         className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700"
                       >

@@ -12,6 +12,7 @@ type ConnectionAccount = {
   firstName: string | null;
   lastName: string | null;
   email: string;
+  role: string;
   profilePhotoUrl: string | null;
   jobTitle: string | null;
   locationCity: string | null;
@@ -138,10 +139,13 @@ export function ConnectionsModal({ accountId, defaultTab, open, onClose }: Conne
                   [connection.firstName, connection.lastName].filter(Boolean).join(" ") || connection.email;
                 const location =
                   [connection.locationCity, connection.locationState].filter(Boolean).join(", ") || null;
+                const profileHref = connection.role === "PROFESSIONAL" 
+                  ? `/professionals/${connection.id}` 
+                  : `/profile/${connection.id}`;
                 return (
                   <li key={connection.id}>
                     <Link
-                      href={`/profile/${connection.id}`}
+                      href={profileHref}
                       className="flex items-center gap-4 rounded-lg border border-slate-200 dark:border-slate-700 p-3 hover:border-blue-200 dark:hover:border-blue-400 hover:bg-blue-50/40 dark:hover:bg-blue-950/30"
                     >
                       {connection.profilePhotoUrl ? (

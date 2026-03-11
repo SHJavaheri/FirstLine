@@ -21,6 +21,7 @@ import { Switch } from "@/components/ui/switch";
 
 type EditProfessionalProfileDialogProps = {
   profile: {
+    bio?: string | null;
     professionalBio?: string | null;
     hourlyRate?: number | null;
     minRate?: number | null;
@@ -38,6 +39,7 @@ export function EditProfessionalProfileDialog({ profile }: EditProfessionalProfi
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    bio: profile.bio || "",
     professionalBio: profile.professionalBio || "",
     hourlyRate: profile.hourlyRate?.toString() || "",
     minRate: profile.minRate?.toString() || "",
@@ -58,6 +60,7 @@ export function EditProfessionalProfileDialog({ profile }: EditProfessionalProfi
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          bio: formData.bio,
           professionalBio: formData.professionalBio,
           hourlyRate: formData.hourlyRate ? parseInt(formData.hourlyRate) : null,
           minRate: formData.minRate ? parseInt(formData.minRate) : null,
@@ -101,14 +104,27 @@ export function EditProfessionalProfileDialog({ profile }: EditProfessionalProfi
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="professionalBio">Professional Bio</Label>
+              <Label htmlFor="bio">Bio (Short Introduction)</Label>
+              <Textarea
+                id="bio"
+                value={formData.bio}
+                onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                rows={2}
+                placeholder="Brief introduction about yourself (shown in profile header)..."
+              />
+              <p className="text-xs text-slate-500">This appears as a short introduction in your profile header</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="professionalBio">About (Detailed Professional Bio)</Label>
               <Textarea
                 id="professionalBio"
                 value={formData.professionalBio}
                 onChange={(e) => setFormData({ ...formData, professionalBio: e.target.value })}
                 rows={4}
-                placeholder="Tell clients about your expertise and approach..."
+                placeholder="Detailed description of your practice, expertise, and what makes you unique..."
               />
+              <p className="text-xs text-slate-500">This appears in your About section (separate from your short bio)</p>
             </div>
 
             <div className="space-y-2">

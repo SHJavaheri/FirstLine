@@ -13,14 +13,14 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
   return (
     <div className="space-y-6">
       {/* About Section */}
-      {(profile.professionalBio || profile.description || profile.account.bio) && (
+      {(profile.professionalBio || profile.description) && (
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">About</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="whitespace-pre-line text-slate-700 leading-relaxed">
-              {profile.professionalBio || profile.description || profile.account.bio}
+            <p className="whitespace-pre-line text-slate-700 dark:text-slate-300 leading-relaxed">
+              {profile.professionalBio || profile.description}
             </p>
           </CardContent>
         </Card>
@@ -40,13 +40,13 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
               {profile.specializations.map((service, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 transition-colors hover:border-blue-300 hover:bg-blue-50"
+                  className="flex items-start gap-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 transition-colors hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30"
                 >
-                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-100">
-                    <Briefcase className="h-4 w-4 text-blue-600" />
+                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
+                    <Briefcase className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-slate-900">{service}</h3>
+                    <h3 className="font-medium text-slate-900 dark:text-white">{service}</h3>
                   </div>
                 </div>
               ))}
@@ -72,8 +72,8 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
                     <Building className="h-6 w-6 text-blue-600" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900">{profile.firmName}</h3>
-                    <p className="text-sm text-slate-600">{profile.profession}</p>
+                    <h3 className="font-semibold text-slate-900 dark:text-white">{profile.firmName}</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">{profile.profession}</p>
                     {profile.yearsAtCurrentFirm && (
                       <p className="mt-1 text-xs text-slate-500">
                         {profile.yearsAtCurrentFirm} {profile.yearsAtCurrentFirm === 1 ? 'year' : 'years'} at this firm
@@ -90,9 +90,9 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
               )}
               
               {profile.totalExperienceYears && (
-                <div className="rounded-lg bg-slate-50 p-4">
-                  <p className="text-sm text-slate-700">
-                    <span className="font-semibold text-slate-900">{profile.totalExperienceYears}</span> years of total professional experience
+                <div className="rounded-lg bg-slate-50 dark:bg-slate-800 p-4">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
+                    <span className="font-semibold text-slate-900 dark:text-white">{profile.totalExperienceYears}</span> years of total professional experience
                   </p>
                 </div>
               )}
@@ -111,51 +111,57 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              {/* Education Box */}
               {profile.education && (
-                <div>
-                  <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
-                    <GraduationCap className="h-4 w-4" />
+                <div className="rounded-lg border-2 border-blue-100 dark:border-blue-900 bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/30 dark:to-slate-800 p-5">
+                  <h3 className="mb-3 flex items-center gap-2 text-base font-semibold text-blue-900 dark:text-blue-100">
+                    <GraduationCap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                     Education
                   </h3>
-                  <div className="ml-6 space-y-2">
+                  <div className="space-y-2">
                     {profile.education.split('\n').map((edu, idx) => (
                       <div key={idx} className="flex items-start gap-2">
-                        <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-600" />
-                        <p className="text-sm text-slate-700">{edu}</p>
+                        <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-600 dark:bg-blue-400" />
+                        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{edu}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {profile.certifications && (
-                <div>
-                  <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
-                    <Award className="h-4 w-4" />
-                    Certifications
+              {/* Credentials Box */}
+              {(profile.certifications || profile.licenseNumber) && (
+                <div className="rounded-lg border-2 border-amber-100 dark:border-amber-900 bg-gradient-to-br from-amber-50 to-white dark:from-amber-950/30 dark:to-slate-800 p-5">
+                  <h3 className="mb-3 flex items-center gap-2 text-base font-semibold text-amber-900 dark:text-amber-100">
+                    <Award className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                    Credentials
                   </h3>
-                  <div className="ml-6 space-y-2">
-                    {profile.certifications.split('\n').map((cert, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
-                        <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-600" />
-                        <p className="text-sm text-slate-700">{cert}</p>
+                  <div className="space-y-4">
+                    {profile.certifications && (
+                      <div className="space-y-2">
+                        {profile.certifications.split('\n').map((cert, idx) => (
+                          <div key={idx} className="flex items-start gap-2">
+                            <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-600 dark:bg-amber-400" />
+                            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{cert}</p>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {profile.licenseNumber && (
-                <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                  <h3 className="mb-2 text-sm font-semibold text-blue-900">Professional License</h3>
-                  <div className="space-y-1 text-sm text-blue-800">
-                    <p><span className="font-medium">License Number:</span> {profile.licenseNumber}</p>
-                    {profile.licensingBody && (
-                      <p><span className="font-medium">Licensing Body:</span> {profile.licensingBody}</p>
                     )}
-                    {profile.licenseJurisdiction && (
-                      <p><span className="font-medium">Jurisdiction:</span> {profile.licenseJurisdiction}</p>
+
+                    {profile.licenseNumber && (
+                      <div className="rounded-md border border-amber-200 dark:border-amber-800 bg-white dark:bg-slate-900 p-3">
+                        <h4 className="mb-2 text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide">Professional License</h4>
+                        <div className="space-y-1 text-sm text-slate-700 dark:text-slate-300">
+                          <p><span className="font-medium text-slate-900 dark:text-white">License #:</span> {profile.licenseNumber}</p>
+                          {profile.licensingBody && (
+                            <p><span className="font-medium text-slate-900 dark:text-white">Body:</span> {profile.licensingBody}</p>
+                          )}
+                          {profile.licenseJurisdiction && (
+                            <p><span className="font-medium text-slate-900 dark:text-white">Jurisdiction:</span> {profile.licenseJurisdiction}</p>
+                          )}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -178,38 +184,38 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
             <div className="space-y-4">
               {profile.pricingModel && (
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-700">Pricing Model</h3>
-                  <p className="mt-1 text-slate-900">{profile.pricingModel}</p>
+                  <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Pricing Model</h3>
+                  <p className="mt-1 text-slate-900 dark:text-white">{profile.pricingModel}</p>
                 </div>
               )}
 
               <div className="grid gap-4 sm:grid-cols-2">
                 {profile.hourlyRate && (
-                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                    <p className="text-sm text-slate-600">Hourly Rate</p>
-                    <p className="mt-1 text-2xl font-bold text-slate-900">${profile.hourlyRate}</p>
-                    <p className="text-xs text-slate-500">per hour</p>
+                  <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Hourly Rate</p>
+                    <p className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">${profile.hourlyRate}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">per hour</p>
                   </div>
                 )}
 
                 {(profile.minRate || profile.maxRate) && (
-                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                    <p className="text-sm text-slate-600">Rate Range</p>
-                    <p className="mt-1 text-2xl font-bold text-slate-900">
+                  <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Rate Range</p>
+                    <p className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">
                       ${profile.minRate || 0} - ${profile.maxRate || 0}
                     </p>
-                    <p className="text-xs text-slate-500">typical range</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">typical range</p>
                   </div>
                 )}
               </div>
 
               {profile.pricingDetails && (
-                <div className="rounded-lg bg-slate-50 p-4">
-                  <p className="text-sm text-slate-700">{profile.pricingDetails}</p>
+                <div className="rounded-lg bg-slate-50 dark:bg-slate-800 p-4">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">{profile.pricingDetails}</p>
                 </div>
               )}
 
-              <div className="flex flex-wrap gap-2 border-t border-slate-200 pt-4">
+              <div className="flex flex-wrap gap-2 border-t border-slate-200 dark:border-slate-700 pt-4">
                 <Badge variant="outline" className="gap-1">
                   <MapPin className="h-3 w-3" />
                   {profile.offersInPerson ? 'In-Person Available' : 'No In-Person'}

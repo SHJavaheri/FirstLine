@@ -305,11 +305,17 @@ export async function getFriends(userId: string, search?: string, limit = 50, of
           lastName: true,
           profilePhotoUrl: true,
           email: true,
+          role: true,
           bio: true,
           locationCity: true,
           locationState: true,
           jobTitle: true,
           createdAt: true,
+          professional: {
+            select: {
+              profession: true,
+            },
+          },
         },
       },
     },
@@ -318,7 +324,10 @@ export async function getFriends(userId: string, search?: string, limit = 50, of
     skip: offset,
   });
 
-  return friendships.map((f) => f.friend);
+  return friendships.map((f) => ({
+    ...f.friend,
+    profession: f.friend.professional?.profession || null,
+  }));
 }
 
 export async function removeFriend(userId: string, friendId: string) {

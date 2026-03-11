@@ -15,12 +15,11 @@ const connectionAccountSelect = {
   firstName: true,
   lastName: true,
   email: true,
+  role: true,
   profilePhotoUrl: true,
-  bannerPhotoUrl: true,
-  bio: true,
+  jobTitle: true,
   locationCity: true,
   locationState: true,
-  jobTitle: true,
   createdAt: true,
 } as const;
 
@@ -66,6 +65,11 @@ export async function searchConsumers(
       professional: {
         select: {
           profession: true,
+          hourlyRate: true,
+          minRate: true,
+          maxRate: true,
+          pricingModel: true,
+          pricingDetails: true,
         },
       },
       _count: {
@@ -127,6 +131,11 @@ export async function searchConsumers(
     isFriend: friendIds.has(consumer.id),
     pendingRequest: requestMap.get(consumer.id) || null,
     profession: consumer.professional?.profession || null,
+    hourlyRate: consumer.professional?.hourlyRate || null,
+    minRate: consumer.professional?.minRate || null,
+    maxRate: consumer.professional?.maxRate || null,
+    pricingModel: consumer.professional?.pricingModel || null,
+    pricingDetails: consumer.professional?.pricingDetails || null,
   }));
 }
 
@@ -193,8 +202,9 @@ export async function getConsumerConnections(
 
 export async function getConsumerProfile(viewerId: string, profileId: string) {
   const consumer = await prisma.account.findUnique({
-    where: { id: profileId, role: "CONSUMER" },
+    where: { id: profileId },
     select: {
+      role: true,
       id: true,
       firstName: true,
       lastName: true,
@@ -226,7 +236,7 @@ export async function getConsumerProfile(viewerId: string, profileId: string) {
   });
 
   if (!consumer) {
-    throw new Error("Consumer not found");
+    throw new Error("Profile not found");
   }
 
   const friendship = await prisma.friendship.findFirst({
@@ -236,10 +246,11 @@ export async function getConsumerProfile(viewerId: string, profileId: string) {
   const isFriend = !!friendship;
   const isSelf = viewerId === profileId;
 
-  const canViewDetails =
-    isSelf ||
-    consumer.profileVisibility === "PUBLIC" ||
-    (consumer.profileVisibility === "FRIENDS_ONLY" && isFriend);
+  // For professional accounts, only allow viewing connections if they're friends or it's the user's own profile
+  // For consumer accounts, respect the profileVisibility setting
+  const canViewDetails = consumer.role === "PROFESSIONAL"
+    ? (isSelf || isFriend)
+    : (isSelf || consumer.profileVisibility === "PUBLIC" || (consumer.profileVisibility === "FRIENDS_ONLY" && isFriend));
 
   if (!canViewDetails) {
     return {
