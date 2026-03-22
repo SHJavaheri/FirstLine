@@ -3,6 +3,7 @@ import {
   listProfessionalProfiles,
   listProfessionalProfilesWithTrust,
   listSpecializations,
+  listProfessions,
 } from "@/backend/repositories/lawyer-repository";
 import type { LawyerSearchFilters, LawyerListItem } from "@/types";
 
@@ -30,6 +31,10 @@ export async function getLawyerProfile(id: string) {
 
 export async function getAllSpecializations() {
   return listSpecializations();
+}
+
+export async function getAllProfessions() {
+  return listProfessions();
 }
 
 function mapProfessionalProfile(
