@@ -23,6 +23,7 @@ type SearchParams = {
   offersInPerson?: string;
   verified?: string;
   sortBy?: string;
+  explore?: string;
 };
 
 function parseNumber(value?: string) {
@@ -52,7 +53,7 @@ export default async function LawyersPage({
   
   const hasFilters = !!(params.q || params.profession || params.specialization || params.location || 
     params.minRate || params.maxRate || params.minRating || params.acceptsNewClients || 
-    params.offersRemote || params.offersInPerson || params.verified);
+    params.offersRemote || params.offersInPerson || params.verified || params.explore);
 
   if (!hasFilters) {
     return (

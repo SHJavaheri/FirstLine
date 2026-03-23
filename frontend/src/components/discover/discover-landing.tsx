@@ -29,6 +29,10 @@ export function DiscoverLanding() {
     handleSearch(searchQuery);
   }
 
+  function handleExploreAll() {
+    router.push("/lawyers?explore=all");
+  }
+
   return (
     <div className="flex min-h-[70vh] items-center justify-center px-4">
       <div className="w-full max-w-3xl space-y-8">
@@ -93,6 +97,21 @@ export function DiscoverLanding() {
               </motion.button>
             ))}
           </div>
+        </motion.div>
+
+        <motion.div
+          className="flex justify-center pt-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.8 }}
+        >
+          <button
+            type="button"
+            onClick={handleExploreAll}
+            className="rounded-full bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg"
+          >
+            Explore professionals
+          </button>
         </motion.div>
       </div>
     </div>

@@ -152,6 +152,25 @@ FirstLine is designed for:
 
 ---
 
+## Project Structure
+
+```
+FirstLine/
+├── docs/                    # Project documentation
+├── frontend/                # Next.js full-stack application
+│   ├── src/
+│   │   ├── app/            # Next.js App Router (pages + API routes)
+│   │   ├── backend/        # Business logic, services, repositories
+│   │   ├── components/     # UI components
+│   │   ├── database/       # Prisma client
+│   │   ├── lib/            # Utilities and helpers
+│   │   └── types/          # TypeScript types
+│   ├── prisma/             # Database schema and migrations
+│   ├── public/             # Static assets
+│   └── package.json
+└── README.md
+```
+
 ## Architecture Overview
 
 FirstLine is being built using modern web technologies designed for scalability, maintainability, and performance.

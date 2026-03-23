@@ -16,19 +16,15 @@ FirstLine is a production-ready MVP for discovering lawyers by specialization, l
 frontend/
   src/
     app/                  # App Router pages + API routes
-    app/api/              # Backend route handlers
+      api/                # Backend route handlers
     backend/              # Business logic, repositories, validators
     components/           # Reusable UI and feature components
     database/             # Prisma client singleton
     lib/                  # Utility/env helpers
     types/                # Shared TypeScript types
   prisma/                 # Prisma schema and seed script
-  backend/                # Requested top-level architecture folder
-  database/               # Requested top-level architecture folder
-  components/             # Requested top-level architecture folder
-  lib/                    # Requested top-level architecture folder
-  types/                  # Requested top-level architecture folder
-  api/                    # Requested top-level architecture folder
+  public/                 # Static assets
+  package.json            # Dependencies and scripts
 ```
 
 ## Setup
