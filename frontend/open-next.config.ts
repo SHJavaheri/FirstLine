@@ -5,4 +5,8 @@ export default {
     port: 3000,
   },
   splitIntoChunks: true,
+  minify: true,
+  routes: {
+    dynamic: "auto",
+  },
 };
