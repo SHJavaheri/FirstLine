@@ -316,7 +316,7 @@ export function ProfileBannerUpload({ currentBannerUrl, userName }: ProfileBanne
                 variant="outline"
                 onClick={handleRemove}
                 disabled={loading}
-                className="border-red-300 text-red-600 hover:bg-red-50"
+                className="border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Remove Banner

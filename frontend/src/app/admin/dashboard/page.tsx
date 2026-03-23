@@ -50,7 +50,7 @@ export default async function AdminDashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <p className="text-sm text-slate-600">Review flagged accounts and apply moderation actions.</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Review flagged accounts and apply moderation actions.</p>
             <div className="flex flex-wrap gap-2">
               <Button type="button" size="sm" variant="outline">
                 <Ban className="mr-1 h-4 w-4" />
@@ -72,7 +72,7 @@ export default async function AdminDashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <p className="text-sm text-slate-600">Remove harmful listings and moderate suspicious activity.</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Remove harmful listings and moderate suspicious activity.</p>
             <div className="flex flex-wrap gap-2">
               <Button type="button" size="sm" variant="outline">
                 Remove Post

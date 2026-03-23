@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
+import { motion } from "framer-motion";
 
 type ConsumerSearchFormProps = {
   initialQuery: string;
@@ -38,7 +39,13 @@ export function ConsumerSearchForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm">
+    <motion.form
+      onSubmit={handleSubmit}
+      className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+    >
       <div className="flex gap-3">
         <div className="flex-1">
           <label htmlFor="query" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -72,6 +79,6 @@ export function ConsumerSearchForm({
           Clear
         </button>
       </div>
-    </form>
+    </motion.form>
   );
 }

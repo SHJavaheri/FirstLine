@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { User, MapPin, CheckCircle, Calendar, Lock, Edit, Pen, Image, Camera } from "lucide-react";
 import type { ConsumerProfile } from "@/types";
 import { ConnectionsStats } from "@/components/friends/connections-stats";
@@ -78,7 +79,12 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
 
   if (!profile.canViewDetails) {
     return (
-      <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <motion.div
+        className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <div className="relative h-40">
           {profile.bannerPhotoUrl ? (
             <img
@@ -94,7 +100,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
         <div className="relative px-6 pb-6">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
             <div className="-mt-20 flex-shrink-0">
-              <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-lg">
+              <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 bg-slate-100 shadow-lg">
                 {profile.profilePhotoUrl ? (
                   <img
                     src={profile.profilePhotoUrl}
@@ -114,10 +120,10 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
             <div className="flex-1 space-y-4 pt-4 sm:pt-0">
               <div>
                 <div className="flex items-center gap-3">
-                  <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">{displayName}</h1>
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">{displayName}</h1>
                   <Lock className="h-5 w-5 text-slate-400" />
                 </div>
-                <p className="mt-2 text-sm text-slate-600">This profile is private</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">This profile is private</p>
               </div>
 
               {!profile.isFriend && (
@@ -132,14 +138,19 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   const memberSince = profile.createdAt ? new Date(profile.createdAt).getFullYear() : null;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <motion.div
+      className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       {profile.isSelf ? (
         <ProfileBannerUpload 
           currentBannerUrl={profile.bannerPhotoUrl} 
@@ -164,7 +175,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
           <div className="-mt-20 flex-shrink-0 sm:-mt-24">
             {profile.isSelf ? (
               <ProfilePhotoUpload currentPhotoUrl={profile.profilePhotoUrl} userName={displayName}>
-                <div className="group relative h-40 w-40 cursor-pointer overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-lg sm:h-48 sm:w-48">
+                <div className="group relative h-40 w-40 cursor-pointer overflow-hidden rounded-full border-4 border-white dark:border-slate-800 bg-slate-100 shadow-lg sm:h-48 sm:w-48">
                   {profile.profilePhotoUrl ? (
                     <img
                       src={profile.profilePhotoUrl}
@@ -190,7 +201,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
                 </div>
               </ProfilePhotoUpload>
             ) : (
-              <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-lg sm:h-48 sm:w-48">
+              <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 bg-slate-100 shadow-lg sm:h-48 sm:w-48">
                 {profile.profilePhotoUrl ? (
                   <img
                     src={profile.profilePhotoUrl}
@@ -217,14 +228,14 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
             <div>
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
                 <div className="flex-1 min-w-0 space-y-2">
-                  <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">{displayName}</h1>
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">{displayName}</h1>
 
                   {profile.jobTitle && (
-                    <p className="mt-1 text-lg font-medium text-slate-700">{profile.jobTitle}</p>
+                    <p className="mt-1 text-lg font-medium text-slate-700 dark:text-slate-300">{profile.jobTitle}</p>
                   )}
 
                   {location && (
-                    <div className="mt-2 flex items-center gap-2 text-slate-600">
+                    <div className="mt-2 flex items-center gap-2 text-slate-600 dark:text-slate-400">
                       <MapPin className="h-4 w-4" />
                       <span className="text-sm">{location}</span>
                     </div>
@@ -284,13 +295,13 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
               </div>
 
               {profile.bio && (
-                <p className="mt-4 text-sm leading-relaxed text-slate-700 line-clamp-2">
+                <p className="mt-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300 line-clamp-2">
                   {profile.bio}
                 </p>
               )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-slate-100 pt-4 text-sm">
+            <div className="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-slate-100 dark:border-slate-700 pt-4 text-sm">
               <ConnectionsStats
                 accountId={profile.id}
                 followingCount={profile.followingCount || 0}
@@ -299,7 +310,7 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
               />
               
               {memberSince && (
-                <div className="flex items-center gap-2 text-slate-600">
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                   <Calendar className="h-4 w-4" />
                   <span>Member since {memberSince}</span>
                 </div>
@@ -315,6 +326,6 @@ export function ConsumerProfileHeader({ profile, currentUserId }: ConsumerProfil
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

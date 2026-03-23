@@ -50,7 +50,7 @@ export function LawyerFilters({ initialFilters, specializations }: LawyerFilters
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-sm">
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
         <div className="space-y-2 xl:col-span-2">
           <Label htmlFor="q">Search</Label>
@@ -68,7 +68,7 @@ export function LawyerFilters({ initialFilters, specializations }: LawyerFilters
             id="specialization"
             value={filters.specialization}
             onChange={(event) => setFilters((prev) => ({ ...prev, specialization: event.target.value }))}
-            className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+            className="h-10 w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900/50 px-3 text-sm text-slate-900 dark:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:focus-visible:ring-slate-500"
           >
             <option value="">All</option>
             {specializations.map((specialization) => (
@@ -115,7 +115,7 @@ export function LawyerFilters({ initialFilters, specializations }: LawyerFilters
             id="minRating"
             value={filters.minRating}
             onChange={(event) => setFilters((prev) => ({ ...prev, minRating: event.target.value }))}
-            className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+            className="h-10 w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900/50 px-3 text-sm text-slate-900 dark:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:focus-visible:ring-slate-500"
           >
             <option value="">Any</option>
             <option value="3">3.0+</option>

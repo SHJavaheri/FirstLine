@@ -51,12 +51,12 @@ export function ActiveFilters({ filters }: ActiveFiltersProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.2 }}
     >
-      <span className="text-sm font-medium text-slate-700">Active filters:</span>
+      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Active filters:</span>
       {filters.map((filter, index) => (
         <motion.button
           key={`${filter.key}-${filter.value}-${index}`}
           onClick={() => handleRemove(filter.key, filter.value)}
-          className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-200"
+          className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 dark:bg-blue-900/40 px-3 py-1 text-sm text-blue-700 dark:text-blue-300 transition-colors hover:bg-blue-200 dark:hover:bg-blue-900/60"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2, delay: 0.3 + index * 0.05 }}
@@ -68,7 +68,7 @@ export function ActiveFilters({ filters }: ActiveFiltersProps) {
       {filters.length > 1 && (
         <motion.button
           onClick={handleClearAll}
-          className="text-sm text-slate-600 underline hover:text-slate-900"
+          className="text-sm text-slate-600 dark:text-slate-400 underline hover:text-slate-900 dark:hover:text-slate-200"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2, delay: 0.3 + filters.length * 0.05 }}

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Award, Briefcase, DollarSign, GraduationCap, MapPin, Clock, Video, Building } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +15,11 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
     <div className="space-y-6">
       {/* About Section */}
       {(profile.professionalBio || profile.description) && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+        >
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">About</CardTitle>
@@ -24,10 +30,16 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
             </p>
           </CardContent>
         </Card>
+        </motion.div>
       )}
 
       {/* Services Offered */}
       {profile.specializations.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+        >
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
@@ -53,10 +65,16 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
             </div>
           </CardContent>
         </Card>
+        </motion.div>
       )}
 
       {/* Experience */}
       {(profile.firmName || profile.totalExperienceYears) && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+        >
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
@@ -68,19 +86,19 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
             <div className="space-y-4">
               {profile.firmName && (
                 <div className="flex gap-4">
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100">
-                    <Building className="h-6 w-6 text-blue-600" />
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
+                    <Building className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-slate-900 dark:text-white">{profile.firmName}</h3>
                     <p className="text-sm text-slate-600 dark:text-slate-400">{profile.profession}</p>
                     {profile.yearsAtCurrentFirm && (
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                         {profile.yearsAtCurrentFirm} {profile.yearsAtCurrentFirm === 1 ? 'year' : 'years'} at this firm
                       </p>
                     )}
                     {profile.firmAddress && (
-                      <div className="mt-2 flex items-center gap-1 text-xs text-slate-500">
+                      <div className="mt-2 flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
                         <MapPin className="h-3 w-3" />
                         <span>{profile.firmAddress}</span>
                       </div>
@@ -99,10 +117,16 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
             </div>
           </CardContent>
         </Card>
+        </motion.div>
       )}
 
       {/* Credentials & Education */}
       {(profile.education || profile.certifications || profile.licenseNumber) && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+        >
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
@@ -169,10 +193,16 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
             </div>
           </CardContent>
         </Card>
+        </motion.div>
       )}
 
       {/* Pricing & Consultation Info */}
       {(profile.hourlyRate || profile.minRate || profile.maxRate || profile.pricingModel) && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+        >
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
@@ -232,6 +262,7 @@ export function ProfessionalProfileSections({ profile }: ProfessionalProfileSect
             </div>
           </CardContent>
         </Card>
+        </motion.div>
       )}
     </div>
   );

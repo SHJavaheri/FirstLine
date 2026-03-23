@@ -54,8 +54,8 @@ export function LawyerCard({
     <Card className="h-full">
       <CardHeader className="space-y-3">
         {totalFriendEndorsements > 0 && (
-          <div className="rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
-            <div className="flex items-center gap-2 text-sm text-blue-900">
+          <div className="rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 px-3 py-2">
+            <div className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
               <Users className="h-4 w-4" />
               <span className="font-medium">
                 Recommended by {totalFriendEndorsements} friend{totalFriendEndorsements !== 1 ? 's' : ''} you follow
@@ -93,10 +93,10 @@ export function LawyerCard({
             </div>
           </div>
         </div>
-        <p className="line-clamp-2 text-sm text-slate-600">{lawyer.description}</p>
+        <p className="line-clamp-2 text-sm text-slate-600 dark:text-slate-400">{lawyer.description}</p>
       </CardHeader>
 
-      <CardContent className="space-y-3 text-sm text-slate-700">
+      <CardContent className="space-y-3 text-sm text-slate-700 dark:text-slate-300">
         <div className="flex items-center gap-2">
           <Wallet className="h-4 w-4 text-slate-500" />
           <span>{hourlyDisplay()}</span>

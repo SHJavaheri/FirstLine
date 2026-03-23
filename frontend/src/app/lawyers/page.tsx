@@ -140,9 +140,9 @@ export default async function LawyersPage({
           </div>
 
           {lawyers.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center">
-              <h2 className="text-xl font-semibold text-slate-900">No professionals match your filters</h2>
-              <p className="mt-2 text-sm text-slate-600">
+            <div className="rounded-xl border border-dashed border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-10 text-center">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">No professionals match your filters</h2>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
                 Try broadening your search terms, location, or rate range.
               </p>
             </div>

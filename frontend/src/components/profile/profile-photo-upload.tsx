@@ -188,8 +188,8 @@ export function ProfilePhotoUpload({ currentPhotoUrl, userName, children }: Prof
           className="h-24 w-24 rounded-full object-cover"
         />
       ) : (
-        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-200">
-          <User className="h-12 w-12 text-slate-500" />
+        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
+          <User className="h-12 w-12 text-slate-500 dark:text-slate-400" />
         </div>
       )}
       <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
@@ -276,12 +276,12 @@ export function ProfilePhotoUpload({ currentPhotoUrl, userName, children }: Prof
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-8 transition hover:border-slate-400 hover:bg-slate-100"
+                  className="flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 p-8 transition hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
-                  <div className="rounded-full bg-slate-100 p-3">
+                  <div className="rounded-full bg-slate-100 dark:bg-slate-700 p-3">
                     <Upload className="h-6 w-6 text-slate-400" />
                   </div>
-                  <p className="mt-3 text-sm font-medium text-slate-900">Click to upload profile photo</p>
+                  <p className="mt-3 text-sm font-medium text-slate-900 dark:text-white">Click to upload profile photo</p>
                   <p className="mt-1 text-xs text-slate-500">PNG, JPG, GIF up to 5MB</p>
                 </button>
               )}
@@ -292,7 +292,7 @@ export function ProfilePhotoUpload({ currentPhotoUrl, userName, children }: Prof
                 onChange={handleFileInput}
                 className="hidden"
               />
-              {error && <p className="text-sm text-red-600">{error}</p>}
+              {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
             </div>
           </div>
           <DialogFooter className="gap-2">
@@ -302,7 +302,7 @@ export function ProfilePhotoUpload({ currentPhotoUrl, userName, children }: Prof
                 variant="outline"
                 onClick={handleRemove}
                 disabled={loading}
-                className="border-red-300 text-red-600 hover:bg-red-50"
+                className="border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Remove Photo

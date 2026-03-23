@@ -13,12 +13,12 @@ export function FilterSection({ title, children, defaultOpen = true }: FilterSec
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-slate-200 py-4">
+    <div className="border-b border-slate-200 dark:border-slate-700 py-3">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex w-full items-center justify-between text-left"
       >
-        <h3 className="font-semibold text-slate-900">{title}</h3>
+        <h3 className="text-sm font-medium text-slate-900 dark:text-white">{title}</h3>
         {isOpen ? (
           <ChevronUp className="h-4 w-4 text-slate-500" />
         ) : (

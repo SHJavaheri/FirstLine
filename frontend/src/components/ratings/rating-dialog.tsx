@@ -141,14 +141,14 @@ export function RatingDialog({
                       className={`h-8 w-8 ${
                         star <= (hoveredRating || rating)
                           ? "fill-amber-400 text-amber-400"
-                          : "text-slate-300"
+                          : "text-slate-300 dark:text-slate-600"
                       }`}
                     />
                   </button>
                 ))}
               </div>
               {rating > 0 && (
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-slate-600 dark:text-slate-400">
                   {rating === 1 && "Poor"}
                   {rating === 2 && "Fair"}
                   {rating === 3 && "Good"}
@@ -175,7 +175,7 @@ export function RatingDialog({
                 variant="outline"
                 onClick={handleDelete}
                 disabled={loading}
-                className="border-red-300 text-red-600 hover:bg-red-50"
+                className="border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30"
               >
                 Delete Rating
               </Button>

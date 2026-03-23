@@ -1,9 +1,7 @@
 import { getCurrentUser } from "@/backend/auth/current-user";
 import { redirect } from "next/navigation";
-import { ConsumerSearchForm } from "@/components/friends/consumer-search-form";
-import { ConsumerSearchResults } from "@/components/friends/consumer-search-results";
 import { getFriendRequests } from "@/backend/repositories/friend-repository";
-import { FriendRequestsList } from "@/components/friends/friend-requests-list";
+import { DiscoverFriendsContent } from "@/components/friends/discover-friends-content";
 
 export const dynamic = "force-dynamic";
 
@@ -42,56 +40,14 @@ export default async function DiscoverFriendsPage({
   }
 
   return (
-    <section className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
-      <div className="space-y-2">
-        <h1 className="text-4xl text-slate-900 dark:text-white">{pageTitle}</h1>
-        <p className="text-slate-600 dark:text-slate-400">
-          {pageDescription}
-        </p>
-      </div>
-
-      {/* Tab Navigation */}
-      <div className="border-b border-slate-200 dark:border-slate-700">
-        <nav className="flex gap-8" aria-label="Tabs">
-          <a
-            href="/discover-friends"
-            className={`border-b-2 py-4 text-sm font-medium transition-colors ${
-              activeTab === "search"
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200"
-            }`}
-          >
-            Search
-          </a>
-          <a
-            href="/discover-friends?tab=requests"
-            className={`border-b-2 py-4 text-sm font-medium transition-colors ${
-              activeTab === "requests"
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200"
-            }`}
-          >
-            Friend Requests
-          </a>
-        </nav>
-      </div>
-
-      {activeTab === "requests" ? (
-        <FriendRequestsList
-          receivedRequests={receivedRequests}
-          sentRequests={sentRequests}
-        />
-      ) : (
-        <>
-          <ConsumerSearchForm
-            initialQuery={params.q || ""}
-          />
-
-          <ConsumerSearchResults
-            query={params.q}
-          />
-        </>
-      )}
-    </section>
+    <DiscoverFriendsContent
+      pageTitle={pageTitle}
+      pageDescription={pageDescription}
+      activeTab={activeTab}
+      initialQuery={params.q || ""}
+      query={params.q}
+      receivedRequests={receivedRequests}
+      sentRequests={sentRequests}
+    />
   );
 }

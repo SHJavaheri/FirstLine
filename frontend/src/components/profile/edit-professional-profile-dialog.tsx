@@ -112,7 +112,7 @@ export function EditProfessionalProfileDialog({ profile }: EditProfessionalProfi
                 rows={2}
                 placeholder="Brief introduction about yourself (shown in profile header)..."
               />
-              <p className="text-xs text-slate-500">This appears as a short introduction in your profile header</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">This appears as a short introduction in your profile header</p>
             </div>
 
             <div className="space-y-2">
@@ -124,7 +124,7 @@ export function EditProfessionalProfileDialog({ profile }: EditProfessionalProfi
                 rows={4}
                 placeholder="Detailed description of your practice, expertise, and what makes you unique..."
               />
-              <p className="text-xs text-slate-500">This appears in your About section (separate from your short bio)</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">This appears in your About section (separate from your short bio)</p>
             </div>
 
             <div className="space-y-2">
@@ -181,8 +181,8 @@ export function EditProfessionalProfileDialog({ profile }: EditProfessionalProfi
               />
             </div>
 
-            <div className="space-y-4 rounded-lg border border-slate-200 p-4">
-              <h3 className="text-sm font-semibold text-slate-900">Availability Settings</h3>
+            <div className="space-y-4 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Availability Settings</h3>
               
               <div className="flex items-center justify-between">
                 <Label htmlFor="acceptsNewClients" className="cursor-pointer">

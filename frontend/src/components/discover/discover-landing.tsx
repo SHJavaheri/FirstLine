@@ -45,10 +45,10 @@ export function DiscoverLanding() {
           <div className="flex items-center justify-center gap-2 mb-6">
             <Sparkles className="h-8 w-8 text-blue-600" />
           </div>
-          <h1 className="text-4xl font-medium text-slate-900 md:text-5xl">
+          <h1 className="text-4xl font-medium text-slate-900 dark:text-white md:text-5xl">
             Find the perfect professional for your needs
           </h1>
-          <p className="text-lg text-slate-600">
+          <p className="text-lg text-slate-600 dark:text-slate-400">
             Search by name, profession, or specialization to discover trusted professionals
           </p>
         </motion.div>
@@ -71,7 +71,7 @@ export function DiscoverLanding() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, profession (Lawyer, Accountant), or specialization (Divorce, Tax, etc.)"
-              className="w-full rounded-full border border-slate-300 bg-white py-4 pl-14 pr-6 text-base shadow-lg transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 hover:shadow-xl"
+              className="w-full rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 py-4 pl-14 pr-6 text-base text-slate-900 dark:text-slate-100 shadow-lg transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 hover:shadow-xl dark:placeholder:text-slate-500"
             />
           </motion.div>
         </motion.form>
@@ -82,13 +82,13 @@ export function DiscoverLanding() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.4 }}
         >
-          <p className="text-center text-sm font-medium text-slate-700">Try searching for:</p>
+          <p className="text-center text-sm font-medium text-slate-700 dark:text-slate-300">Try searching for:</p>
           <div className="flex flex-wrap justify-center gap-2">
             {SUGGESTED_SEARCHES.map((suggestion, index) => (
               <motion.button
                 key={suggestion}
                 onClick={() => handleSearch(suggestion)}
-                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 transition-all hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+                className="rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 transition-all hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:text-blue-700 dark:hover:text-blue-400"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.5 + index * 0.05, ease: "easeOut" }}

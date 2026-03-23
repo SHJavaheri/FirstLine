@@ -125,13 +125,13 @@ export function DiscoverSidebar({
 
   return (
     <motion.aside 
-      className="w-72 border-r border-slate-200 bg-white p-4 overflow-y-auto"
+      className="w-72 border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 overflow-y-auto"
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
     >
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-slate-900">Filters</h2>
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Filters</h2>
         <Button variant="ghost" size="sm" onClick={clearFilters}>
           Clear all
         </Button>
@@ -145,9 +145,9 @@ export function DiscoverSidebar({
                 type="checkbox"
                 checked={filters.profession.includes(profession)}
                 onChange={() => toggleProfession(profession)}
-                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm text-slate-700">{profession}</span>
+              <span className="text-sm text-slate-700 dark:text-slate-300">{profession}</span>
             </label>
           ))}
         </FilterSection>
@@ -156,7 +156,7 @@ export function DiscoverSidebar({
           <select
             value={filters.specialization}
             onChange={(e) => updateFilter("specialization", e.target.value)}
-            className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             <option value="">All Specializations</option>
             {specializations.map((spec) => (
@@ -173,7 +173,7 @@ export function DiscoverSidebar({
             value={filters.location}
             onChange={(e) => updateFilter("location", e.target.value)}
             placeholder="City or state"
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:placeholder:text-slate-500"
           />
         </FilterSection>
 
@@ -206,11 +206,11 @@ export function DiscoverSidebar({
                   name="rating"
                   checked={filters.minRating === rating.value}
                   onChange={() => updateFilter("minRating", rating.value)}
-                  className="h-4 w-4 border-slate-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
                 />
                 <div className="flex items-center gap-1">
                   <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  <span className="text-sm text-slate-700">{rating.label}</span>
+                  <span className="text-sm text-slate-700 dark:text-slate-300">{rating.label}</span>
                 </div>
               </label>
             ))}
@@ -220,9 +220,9 @@ export function DiscoverSidebar({
                 name="rating"
                 checked={filters.minRating === ""}
                 onChange={() => updateFilter("minRating", "")}
-                className="h-4 w-4 border-slate-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm text-slate-700">Any rating</span>
+              <span className="text-sm text-slate-700 dark:text-slate-300">Any rating</span>
             </label>
           </div>
         </FilterSection>
@@ -233,27 +233,27 @@ export function DiscoverSidebar({
               type="checkbox"
               checked={filters.acceptsNewClients}
               onChange={(e) => updateFilter("acceptsNewClients", e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm text-slate-700">Accepts New Clients</span>
+            <span className="text-sm text-slate-700 dark:text-slate-300">Accepts New Clients</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={filters.offersRemote}
               onChange={(e) => updateFilter("offersRemote", e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm text-slate-700">Offers Remote Services</span>
+            <span className="text-sm text-slate-700 dark:text-slate-300">Offers Remote Services</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={filters.offersInPerson}
               onChange={(e) => updateFilter("offersInPerson", e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm text-slate-700">Offers In-Person Services</span>
+            <span className="text-sm text-slate-700 dark:text-slate-300">Offers In-Person Services</span>
           </label>
         </FilterSection>
 
@@ -263,9 +263,9 @@ export function DiscoverSidebar({
               type="checkbox"
               checked={filters.verified}
               onChange={(e) => updateFilter("verified", e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm text-slate-700">Verified Only</span>
+            <span className="text-sm text-slate-700 dark:text-slate-300">Verified Only</span>
           </label>
         </FilterSection>
       </div>

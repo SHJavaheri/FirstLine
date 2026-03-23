@@ -51,7 +51,7 @@ export function RangeSlider({
           min={min}
           max={max}
           step={step}
-          className="w-24 rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-24 rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1.5 text-sm text-slate-900 dark:text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
         <span className="text-slate-500">to</span>
         <input
@@ -61,11 +61,11 @@ export function RangeSlider({
           min={min}
           max={max}
           step={step}
-          className="w-24 rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-24 rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1.5 text-sm text-slate-900 dark:text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
       </div>
       <div className="relative pt-1">
-        <div className="relative h-2 rounded-full bg-slate-200">
+        <div className="relative h-2 rounded-full bg-slate-200 dark:bg-slate-700">
           <div
             className="absolute h-2 rounded-full bg-blue-500"
             style={{
@@ -95,7 +95,7 @@ export function RangeSlider({
           style={{ pointerEvents: "none" }}
         />
       </div>
-      <div className="flex justify-between text-xs text-slate-600">
+      <div className="flex justify-between text-xs text-slate-600 dark:text-slate-400">
         <span>{formatValue(localMin)}</span>
         <span>{formatValue(localMax)}</span>
       </div>
