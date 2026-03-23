@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/database/prisma";
+import type { Prisma } from "@prisma/client";
 
 export type ConsumerPreferences = {
   serviceInterests: string[];
@@ -78,7 +79,7 @@ export async function updateNotificationPreferences(
 ) {
   return prisma.account.update({
     where: { id: accountId },
-    data: { notificationPreferences },
+    data: { notificationPreferences: notificationPreferences as Prisma.InputJsonValue },
   });
 }
 
@@ -104,7 +105,7 @@ export async function updateAllPreferences(
     updateData.distancePreference = preferences.distancePreference;
   }
   if (preferences.notificationPreferences !== undefined) {
-    updateData.notificationPreferences = preferences.notificationPreferences;
+    updateData.notificationPreferences = preferences.notificationPreferences as Prisma.InputJsonValue;
   }
 
   return prisma.account.update({

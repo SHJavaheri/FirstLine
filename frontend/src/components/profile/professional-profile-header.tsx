@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Star, MapPin, Briefcase, CheckCircle, Globe, Phone, Mail, MessageSquare, Calendar, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +33,12 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer, followi
   const memberSince = new Date(profile.account.createdAt).getFullYear();
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
+    <motion.div
+      className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       {isSelf ? (
         <ProfileBannerUpload 
           currentBannerUrl={profile.account.bannerPhotoUrl} 
@@ -57,7 +63,7 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer, followi
           <div className="-mt-16 flex-shrink-0 sm:-mt-20">
             {isSelf ? (
               <ProfilePhotoUpload currentPhotoUrl={profile.account.profilePhotoUrl} userName={displayName}>
-                <div className="group relative h-32 w-32 cursor-pointer overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-lg sm:h-40 sm:w-40">
+                <div className="group relative h-32 w-32 cursor-pointer overflow-hidden rounded-full border-4 border-white dark:border-slate-800 bg-slate-100 shadow-lg sm:h-40 sm:w-40">
                   {profile.account.profilePhotoUrl ? (
                     <img
                       src={profile.account.profilePhotoUrl}
@@ -83,7 +89,7 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer, followi
                 </div>
               </ProfilePhotoUpload>
             ) : (
-              <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-lg sm:h-40 sm:w-40">
+              <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 bg-slate-100 shadow-lg sm:h-40 sm:w-40">
                 {profile.account.profilePhotoUrl ? (
                   <img
                     src={profile.account.profilePhotoUrl}
@@ -114,14 +120,14 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer, followi
                   <p className="mt-1 text-lg font-medium text-slate-700 dark:text-slate-300">{profile.profession}</p>
                   
                   {profile.firmName && (
-                    <div className="mt-2 flex items-center gap-2 text-slate-600">
+                    <div className="mt-2 flex items-center gap-2 text-slate-600 dark:text-slate-400">
                       <Briefcase className="h-4 w-4" />
                       <span className="text-sm">{profile.firmName}</span>
                     </div>
                   )}
                   
                   {location && (
-                    <div className="mt-1 flex items-center gap-2 text-slate-600">
+                    <div className="mt-1 flex items-center gap-2 text-slate-600 dark:text-slate-400">
                       <MapPin className="h-4 w-4" />
                       <span className="text-sm">{location}</span>
                     </div>
@@ -183,13 +189,13 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer, followi
               </div>
 
               {profile.account.bio && (
-                <p className="mt-4 text-sm leading-relaxed text-slate-700 line-clamp-2">
+                <p className="mt-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300 line-clamp-2">
                   {profile.account.bio}
                 </p>
               )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-slate-100 pt-4 text-sm">
+            <div className="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-slate-100 dark:border-slate-700 pt-4 text-sm">
               <ConnectionsStats
                 accountId={profile.accountId}
                 followingCount={followingCount}
@@ -199,18 +205,18 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer, followi
               
               <div className="flex items-center gap-2">
                 <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
-                <span className="font-semibold text-slate-900">{profile.rating.toFixed(1)}</span>
-                <span className="text-slate-600">({profile.reviewCount} reviews)</span>
+                <span className="font-semibold text-slate-900 dark:text-white">{profile.rating.toFixed(1)}</span>
+                <span className="text-slate-600 dark:text-slate-400">({profile.reviewCount} reviews)</span>
               </div>
               
               {profile.totalExperienceYears && (
-                <div className="flex items-center gap-2 text-slate-600">
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                   <Briefcase className="h-4 w-4" />
                   <span>{profile.totalExperienceYears} years experience</span>
                 </div>
               )}
               
-              <div className="flex items-center gap-2 text-slate-600">
+              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                 <CheckCircle className="h-4 w-4" />
                 <span>Member since {memberSince}</span>
               </div>
@@ -222,7 +228,7 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer, followi
               )}
             </div>
 
-            <div className="flex flex-wrap gap-3 border-t border-slate-100 pt-4 text-sm text-slate-600">
+            <div className="flex flex-wrap gap-3 border-t border-slate-100 dark:border-slate-700 pt-4 text-sm text-slate-600 dark:text-slate-400">
               {profile.firmWebsite && (
                 <a
                   href={profile.firmWebsite}
@@ -250,6 +256,6 @@ export function ProfessionalProfileHeader({ profile, isSelf, isConsumer, followi
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

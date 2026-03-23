@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { ConsumerCard } from "./consumer-card";
 import type { ConsumerSearchResult } from "@/types";
 
@@ -132,20 +133,31 @@ export function ConsumerSearchResults({
   }
 
   return (
-    <div className="space-y-4">
+    <motion.div
+      className="space-y-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, delay: 0.3 }}
+    >
       <p className="text-sm text-slate-600 dark:text-slate-400">
         Found {consumers.length} consumer{consumers.length !== 1 ? "s" : ""}
       </p>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {consumers.map((consumer) => (
-          <ConsumerCard
+        {consumers.map((consumer, index) => (
+          <motion.div
             key={consumer.id}
-            consumer={consumer}
-            onSendRequest={handleSendRequest}
-            onCancelRequest={handleCancelRequest}
-          />
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.4 + index * 0.05, ease: "easeOut" }}
+          >
+            <ConsumerCard
+              consumer={consumer}
+              onSendRequest={handleSendRequest}
+              onCancelRequest={handleCancelRequest}
+            />
+          </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

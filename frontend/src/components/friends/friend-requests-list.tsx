@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { User, Check, X } from "lucide-react";
 import type { FriendRequest } from "@/types";
 
@@ -102,7 +103,12 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
   return (
     <div className="space-y-6">
       {/* Received Requests */}
-      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm">
+      <motion.div
+        className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
           Received Requests ({receivedRequests.length})
         </h2>
@@ -111,10 +117,13 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
           <p className="text-sm text-slate-600 dark:text-slate-400">No pending friend requests</p>
         ) : (
           <div className="space-y-4">
-            {receivedRequests.map((request) => (
-              <div
+            {receivedRequests.map((request, index) => (
+              <motion.div
                 key={request.id}
                 className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 p-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 + index * 0.05, ease: "easeOut" }}
               >
                 <div className="flex items-center gap-4">
                   <Link href={getProfileHref(request.sender)}>
@@ -160,14 +169,19 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                     Decline
                   </button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* Sent Requests */}
-      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm">
+      <motion.div
+        className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+      >
         <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
           Sent Requests ({sentRequests.length})
         </h2>
@@ -176,10 +190,13 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
           <p className="text-sm text-slate-600 dark:text-slate-400">No pending sent requests</p>
         ) : (
           <div className="space-y-4">
-            {sentRequests.map((request) => (
-              <div
+            {sentRequests.map((request, index) => (
+              <motion.div
                 key={request.id}
                 className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 p-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 + index * 0.05, ease: "easeOut" }}
               >
                 <div className="flex items-center gap-4">
                   <Link href={getProfileHref(request.receiver)}>
@@ -214,11 +231,11 @@ export function FriendRequestsList({ receivedRequests, sentRequests }: FriendReq
                 >
                   Cancel Request
                 </button>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

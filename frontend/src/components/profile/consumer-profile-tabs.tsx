@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Star, Briefcase, Award } from "lucide-react";
 import Link from "next/link";
 import type { ConsumerProfile, ConsumerRating, PersonalRecommendation } from "@/types";
@@ -46,7 +47,12 @@ export function ConsumerProfileTabs({ accountId, profile }: ConsumerProfileTabsP
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
+    <motion.div
+      className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+    >
       <div className="border-b border-slate-200 dark:border-slate-700">
         <nav className="flex gap-8 px-6" aria-label="Tabs">
           <button
@@ -89,7 +95,7 @@ export function ConsumerProfileTabs({ accountId, profile }: ConsumerProfileTabsP
           <RecommendationsTab recommendations={recommendations} />
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -5,6 +5,47 @@
 
 ---
 
+## Quick Start (Local Development)
+
+Get started in minutes with zero configuration:
+
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd FirstLine/frontend
+
+# 2. Start PostgreSQL database (Docker required)
+docker-compose up -d
+
+# 3. Install dependencies
+npm install
+
+# 4. Setup database
+npm run prisma:generate
+npm run prisma:migrate -- --name init
+npm run prisma:seed
+
+# 5. Start development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+**Demo Credentials:**
+- Email: `owner@firstline-demo.com`
+- Password: `Password123!`
+
+**Prerequisites:**
+- Node.js 20+ 
+- Docker (for PostgreSQL)
+- npm or pnpm
+
+> **Note:** The `.env` file is already configured for local development. No additional setup needed!
+
+For detailed setup instructions, see [`frontend/README.md`](frontend/README.md).
+
+---
+
 ## Overview
 
 **FirstLine** is a professional discovery platform developed by **Northbound**, designed to help individuals find, evaluate, and connect with trusted professionals quickly, transparently, and confidently.
@@ -110,6 +151,25 @@ FirstLine is designed for:
 - Anyone who needs to find a qualified professional efficiently
 
 ---
+
+## Project Structure
+
+```
+FirstLine/
+├── docs/                    # Project documentation
+├── frontend/                # Next.js full-stack application
+│   ├── src/
+│   │   ├── app/            # Next.js App Router (pages + API routes)
+│   │   ├── backend/        # Business logic, services, repositories
+│   │   ├── components/     # UI components
+│   │   ├── database/       # Prisma client
+│   │   ├── lib/            # Utilities and helpers
+│   │   └── types/          # TypeScript types
+│   ├── prisma/             # Database schema and migrations
+│   ├── public/             # Static assets
+│   └── package.json
+└── README.md
+```
 
 ## Architecture Overview
 

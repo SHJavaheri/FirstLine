@@ -108,7 +108,7 @@ export function RecommendButton({
           className={`flex h-5 w-5 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors ${
             isRecommended
               ? "border-green-600 bg-green-600 text-white"
-              : "border-slate-400 text-slate-400 hover:border-green-600 hover:text-green-600"
+              : "border-slate-400 dark:border-slate-500 text-slate-400 dark:text-slate-500 hover:border-green-600 hover:text-green-600"
           }`}
         >
           R

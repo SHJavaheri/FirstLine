@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Star, User } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RatingDialog } from "@/components/ratings/rating-dialog";
@@ -45,6 +46,11 @@ export function ProfessionalProfileReviews({
   });
 
   return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+    >
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
@@ -73,7 +79,7 @@ export function ProfessionalProfileReviews({
                     className={`h-5 w-5 ${
                       star <= Math.round(averageRating)
                         ? "fill-amber-400 text-amber-400"
-                        : "text-slate-300"
+                        : "text-slate-300 dark:text-slate-600"
                     }`}
                   />
                 ))}
@@ -102,23 +108,26 @@ export function ProfessionalProfileReviews({
           {/* Reviews List */}
           {reviews.length === 0 ? (
             <div className="py-12 text-center">
-              <Star className="mx-auto h-12 w-12 text-slate-300" />
+              <Star className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600" />
               <p className="mt-4 text-slate-600 dark:text-slate-400">No reviews yet</p>
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Be the first to leave a review!</p>
             </div>
           ) : (
             <div className="space-y-4">
-              {reviews.map((review) => {
+              {reviews.map((review, index) => {
                 const reviewerName = [review.consumer.firstName, review.consumer.lastName]
                   .filter(Boolean)
                   .join(" ") || "Anonymous";
 
                 return (
-                  <div 
+                  <motion.div 
                     key={review.id} 
                     className={`rounded-lg border border-slate-200 dark:border-slate-700 p-4 transition-all ${
                       isSelf ? "hover:shadow-md hover:border-cyan-300 dark:hover:border-cyan-600 cursor-default" : ""
                     }`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.5 + index * 0.05, ease: "easeOut" }}
                   >
                     <div className="flex items-start gap-4">
                       <Link href={`/profile/${review.consumer.id}`} className="flex-shrink-0">
@@ -148,7 +157,7 @@ export function ProfessionalProfileReviews({
                                   className={`h-4 w-4 ${
                                     star <= review.rating
                                       ? "fill-amber-400 text-amber-400"
-                                      : "text-slate-300"
+                                      : "text-slate-300 dark:text-slate-600"
                                   }`}
                                 />
                               ))}
@@ -171,7 +180,7 @@ export function ProfessionalProfileReviews({
                         )}
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
@@ -179,5 +188,6 @@ export function ProfessionalProfileReviews({
         </div>
       </CardContent>
     </Card>
+    </motion.div>
   );
 }

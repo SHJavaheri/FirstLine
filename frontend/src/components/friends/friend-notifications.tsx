@@ -120,7 +120,7 @@ export function FriendNotifications() {
     <div className="relative">
       <button
         onClick={handleToggle}
-        className="relative rounded-lg p-2 text-slate-700 hover:bg-slate-100"
+        className="relative rounded-lg p-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
       >
         <Bell className="h-5 w-5" />
         {requests.length > 0 && !hasViewed && (
@@ -136,10 +136,10 @@ export function FriendNotifications() {
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 top-full z-20 mt-2 w-96 rounded-lg border border-slate-200 bg-white shadow-lg">
-            <div className="border-b border-slate-200 px-4 py-3">
+          <div className="absolute right-0 top-full z-20 mt-2 w-96 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg">
+            <div className="border-b border-slate-200 dark:border-slate-700 px-4 py-3">
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-slate-900">Friend Requests</h3>
+                <h3 className="font-semibold text-slate-900 dark:text-white">Friend Requests</h3>
                 {requests.length > 0 && (
                   <Link
                     href="/friends/requests"
@@ -159,10 +159,10 @@ export function FriendNotifications() {
                 </div>
               ) : requests.length === 0 ? (
                 <div className="px-4 py-8 text-center">
-                  <p className="text-sm text-slate-600">No pending friend requests</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">No pending friend requests</p>
                 </div>
               ) : (
-                <div className="divide-y divide-slate-200">
+                <div className="divide-y divide-slate-200 dark:divide-slate-700">
                   {requests.map((request) => (
                     <div key={request.id} className="p-4">
                       <div className="flex items-start gap-3">
@@ -177,20 +177,20 @@ export function FriendNotifications() {
                               className="h-10 w-10 rounded-full object-cover"
                             />
                           ) : (
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200">
-                              <User className="h-5 w-5 text-slate-500" />
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
+                              <User className="h-5 w-5 text-slate-500 dark:text-slate-400" />
                             </div>
                           )}
                         </Link>
                         <div className="flex-1 min-w-0">
                           <Link
                             href={getFriendRequestProfileHref(request)}
-                            className="font-medium text-slate-900 hover:text-blue-600"
+                            className="font-medium text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
                             onClick={() => setIsOpen(false)}
                           >
                             {getDisplayNameWithProfession(request.sender)}
                           </Link>
-                          <p className="text-xs text-slate-600 mt-1">
+                          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                             {new Date(request.createdAt).toLocaleDateString()}
                           </p>
                           <div className="mt-2 flex gap-2">
@@ -205,7 +205,7 @@ export function FriendNotifications() {
                             <button
                               onClick={() => handleDecline(request.id)}
                               disabled={actionLoading === request.id}
-                              className="flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                              className="flex items-center gap-1 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50"
                             >
                               <X className="h-3 w-3" />
                               Decline

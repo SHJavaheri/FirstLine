@@ -46,11 +46,16 @@ export type LawyerListItem = {
 
 export type LawyerSearchFilters = {
   q?: string;
+  profession?: string[];
   specialization?: string;
   location?: string;
   minRate?: number;
   maxRate?: number;
   minRating?: number;
+  acceptsNewClients?: boolean;
+  offersRemote?: boolean;
+  offersInPerson?: boolean;
+  verified?: boolean;
 };
 
 export type FriendRequestStatus = "PENDING" | "ACCEPTED" | "DECLINED" | "CANCELLED";

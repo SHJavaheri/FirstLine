@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { Bell, User, Check, X, Star, Award } from "lucide-react";
 
 type Notification = {
@@ -241,7 +242,7 @@ export function NotificationBell() {
     <div className="relative">
       <button
         onClick={handleToggle}
-        className="relative rounded-lg p-2 text-slate-700 hover:bg-slate-100"
+        className="relative rounded-lg p-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
       >
         <Bell className="h-5 w-5" />
         {totalUnread > 0 && !hasViewed && (
@@ -251,16 +252,24 @@ export function NotificationBell() {
         )}
       </button>
 
-      {isOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setIsOpen(false)}
-          />
-          <div className="absolute right-0 top-full z-20 mt-2 w-96 rounded-lg border border-slate-200 bg-white shadow-lg">
-            <div className="border-b border-slate-200 px-4 py-3">
-              <h3 className="font-semibold text-slate-900">Notifications</h3>
-            </div>
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-10"
+              onClick={() => setIsOpen(false)}
+            />
+            <motion.div
+              className="absolute right-0 top-full z-20 mt-2 w-96 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg"
+              initial={{ opacity: 0, scale: 0.95, y: -5 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -5 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              style={{ transformOrigin: "top right" }}
+            >
+              <div className="border-b border-slate-200 dark:border-slate-700 px-4 py-3">
+                <h3 className="font-semibold text-slate-900 dark:text-white">Notifications</h3>
+              </div>
 
             <div className="max-h-96 overflow-y-auto">
               {isLoading ? (
@@ -269,12 +278,18 @@ export function NotificationBell() {
                 </div>
               ) : (friendRequests.length === 0 && notifications.length === 0) ? (
                 <div className="px-4 py-8 text-center">
-                  <p className="text-sm text-slate-600">No notifications</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">No notifications</p>
                 </div>
               ) : (
-                <div className="divide-y divide-slate-200">
-                  {friendRequests.map((request) => (
-                    <div key={request.id} className="p-4">
+                <div className="divide-y divide-slate-200 dark:divide-slate-700">
+                  {friendRequests.map((request, index) => (
+                    <motion.div
+                      key={request.id}
+                      className="p-4"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, delay: index * 0.04, ease: "easeOut" }}
+                    >
                       <div className="flex items-start gap-3">
                         <Link
                           href={getFriendRequestProfileHref(request)}
@@ -287,23 +302,23 @@ export function NotificationBell() {
                               className="h-10 w-10 rounded-full object-cover"
                             />
                           ) : (
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200">
-                              <User className="h-5 w-5 text-slate-500" />
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
+                              <User className="h-5 w-5 text-slate-500 dark:text-slate-400" />
                             </div>
                           )}
                         </Link>
                         <div className="flex-1 min-w-0">
                           <Link
                             href={getFriendRequestProfileHref(request)}
-                            className="font-medium text-slate-900 hover:text-blue-600"
+                            className="font-medium text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
                             onClick={() => setIsOpen(false)}
                           >
                             {getDisplayNameWithProfession(request.sender)}
                           </Link>
-                          <p className="text-xs text-slate-600 mt-1">
+                          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                             Sent you a friend request
                           </p>
-                          <p className="text-xs text-slate-500 mt-1">
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                             {new Date(request.createdAt).toLocaleDateString()}
                           </p>
                           <div className="mt-2 flex gap-2">
@@ -318,7 +333,7 @@ export function NotificationBell() {
                             <button
                               onClick={() => handleDeclineFriend(request.id)}
                               disabled={actionLoading === request.id}
-                              className="flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                              className="flex items-center gap-1 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50"
                             >
                               <X className="h-3 w-3" />
                               Decline
@@ -326,13 +341,16 @@ export function NotificationBell() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
 
-                  {displayedNotifications.map((notification) => (
-                    <div
+                  {displayedNotifications.map((notification, index) => (
+                    <motion.div
                       key={notification.id}
-                      className="group relative p-4 hover:bg-slate-50 transition-colors"
+                      className="group relative p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, delay: (friendRequests.length + index) * 0.04, ease: "easeOut" }}
                     >
                       <button
                         type="button"
@@ -340,14 +358,14 @@ export function NotificationBell() {
                         className="block w-full text-left"
                       >
                         <div className="flex items-start gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
                             {getNotificationIcon(notification.type)}
                           </div>
                           <div className="flex-1 min-w-0 pr-6">
-                            <p className="text-sm text-slate-900">
+                            <p className="text-sm text-slate-900 dark:text-white">
                               {notification.message}
                             </p>
-                            <p className="text-xs text-slate-500 mt-1">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                               {new Date(notification.createdAt).toLocaleDateString()}
                             </p>
                           </div>
@@ -356,18 +374,18 @@ export function NotificationBell() {
                       <button
                         onClick={(e) => handleDeleteNotification(notification.id, e)}
                         disabled={deletingNotificationId === notification.id}
-                        className="absolute top-3 right-3 rounded-full p-1 text-slate-400 hover:bg-slate-200 hover:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
+                        className="absolute top-3 right-3 rounded-full p-1 text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
                         aria-label="Delete notification"
                       >
                         <X className="h-3.5 w-3.5" />
                       </button>
-                    </div>
+                    </motion.div>
                   ))}
                   {hasMore && (
-                    <div className="p-3 border-t border-slate-200">
+                    <div className="p-3 border-t border-slate-200 dark:border-slate-700">
                       <button
                         onClick={handleLoadMore}
-                        className="w-full rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200 transition-colors"
+                        className="w-full rounded-lg bg-slate-100 dark:bg-slate-800 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                       >
                         View More
                       </button>
@@ -376,9 +394,10 @@ export function NotificationBell() {
                 </div>
               )}
             </div>
-          </div>
-        </>
-      )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

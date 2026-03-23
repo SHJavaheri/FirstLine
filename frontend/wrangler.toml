@@ -1,0 +1,6 @@
+name = "firstline"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Pages deployment is handled by @opennextjs/cloudflare
+# Environment variables are set in the Cloudflare dashboard

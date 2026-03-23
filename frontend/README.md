@@ -16,48 +16,35 @@ FirstLine is a production-ready MVP for discovering lawyers by specialization, l
 frontend/
   src/
     app/                  # App Router pages + API routes
-    app/api/              # Backend route handlers
+      api/                # Backend route handlers
     backend/              # Business logic, repositories, validators
     components/           # Reusable UI and feature components
     database/             # Prisma client singleton
     lib/                  # Utility/env helpers
     types/                # Shared TypeScript types
   prisma/                 # Prisma schema and seed script
-  backend/                # Requested top-level architecture folder
-  database/               # Requested top-level architecture folder
-  components/             # Requested top-level architecture folder
-  lib/                    # Requested top-level architecture folder
-  types/                  # Requested top-level architecture folder
-  api/                    # Requested top-level architecture folder
+  public/                 # Static assets
+  package.json            # Dependencies and scripts
 ```
 
 ## Setup
 
-1. Copy environment values:
+> **Zero Configuration Required!** The `.env` file is already configured with working local development values. Just follow the steps below.
 
-```bash
-cp .env.example .env
-```
-
-2. Update `.env`:
-
-- `DATABASE_URL`: PostgreSQL connection URL
-- `JWT_SECRET`: long random string (32+ chars)
-
-3. Install dependencies:
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-4. Generate Prisma client and run migrations:
+2. Generate Prisma client and run migrations:
 
 ```bash
 npm run prisma:generate
 npm run prisma:migrate -- --name init
 ```
 
-5. Seed demo data:
+3. Seed demo data:
 
 ```bash
 npm run prisma:seed
@@ -76,11 +63,21 @@ Open `http://localhost:3000`.
 - Email: `owner@firstline-demo.com`
 - Password: `Password123!`
 
+## Environment Variables
+
+The `.env` file is committed to the repository with development-only credentials for convenience. This allows zero-configuration local setup.
+
+**⚠️ For Production Deployment:**
+- **NEVER** use the committed `.env` values in production
+- Set environment variables through your hosting platform (Vercel, AWS, etc.)
+- Use secure secret management for `JWT_SECRET`
+- Use a production database for `DATABASE_URL`
+
 ## Deployment (Vercel)
 
 1. Push repository to Git provider.
 2. Import project in Vercel.
-3. Set environment variables (`DATABASE_URL`, `JWT_SECRET`).
+3. Set environment variables (`DATABASE_URL`, `JWT_SECRET`) - **DO NOT use the values from `.env`**
 4. Configure build command:
 
 ```bash

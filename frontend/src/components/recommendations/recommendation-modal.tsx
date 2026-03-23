@@ -102,15 +102,15 @@ export function RecommendationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl bg-white shadow-xl">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl bg-white dark:bg-slate-900 shadow-xl">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-6 py-4">
           <div>
-            <h2 className="text-xl font-semibold text-slate-900">Recommend {professionalName}</h2>
-            <p className="text-sm text-slate-600">Share your experience to help friends</p>
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Recommend {professionalName}</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Share your experience to help friends</p>
           </div>
           <button
             onClick={handleClose}
-            className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+            className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-300"
           >
             <X className="h-5 w-5" />
           </button>
@@ -119,8 +119,8 @@ export function RecommendationModal({
         <div className="space-y-6 px-6 py-6">
           <div>
             <div className="mb-4 flex items-center justify-between">
-              <label className="text-sm font-medium text-slate-900">
-                Select up to 3 tags <span className="text-red-600">*</span>
+              <label className="text-sm font-medium text-slate-900 dark:text-white">
+                Select up to 3 tags <span className="text-red-600 dark:text-red-400">*</span>
               </label>
               <span className="text-xs text-slate-500">
                 {selectedTags.length}/3 selected
@@ -130,7 +130,7 @@ export function RecommendationModal({
             <div className="space-y-4">
               {Object.entries(tagCategories).map(([category, tags]) => (
                 <div key={category}>
-                  <h3 className="mb-2 text-sm font-medium text-slate-700">{category}</h3>
+                  <h3 className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">{category}</h3>
                   <div className="flex flex-wrap gap-2">
                     {tags.map(tag => {
                       const isSelected = selectedTags.includes(tag);
@@ -145,8 +145,8 @@ export function RecommendationModal({
                             isSelected
                               ? "bg-blue-600 text-white"
                               : isDisabled
-                              ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                              ? "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed"
+                              : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                           }`}
                         >
                           {tag}
@@ -160,14 +160,14 @@ export function RecommendationModal({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-900">
+            <label className="mb-2 block text-sm font-medium text-slate-900 dark:text-white">
               Additional Comments (Optional)
             </label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value.slice(0, 200))}
               placeholder="Share more details about your experience..."
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               rows={3}
               maxLength={200}
             />
@@ -175,13 +175,13 @@ export function RecommendationModal({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-900">
+            <label className="mb-2 block text-sm font-medium text-slate-900 dark:text-white">
               Would you use this professional again? (Optional)
             </label>
             <select
               value={wouldUseAgain}
               onChange={(e) => setWouldUseAgain(e.target.value as WouldUseAgainOption | "")}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               <option value="">Select an option</option>
               {WOULD_USE_AGAIN_OPTIONS.map(option => (
@@ -193,17 +193,17 @@ export function RecommendationModal({
           </div>
 
           {error && (
-            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-800">
+            <div className="rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-800 dark:text-red-300">
               {error}
             </div>
           )}
         </div>
 
-        <div className="sticky bottom-0 flex gap-3 border-t border-slate-200 bg-white px-6 py-4">
+        <div className="sticky bottom-0 flex gap-3 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-6 py-4">
           <button
             onClick={handleClose}
             disabled={isSubmitting}
-            className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+            className="flex-1 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50"
           >
             Cancel
           </button>

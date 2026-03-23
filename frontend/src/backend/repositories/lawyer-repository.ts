@@ -21,8 +21,17 @@ export async function listProfessionalProfiles(filters: LawyerSearchFilters) {
       OR: [
         { profession: { contains: filters.q, mode: "insensitive" } },
         { description: { contains: filters.q, mode: "insensitive" } },
+        { specializations: { hasSome: [filters.q] } },
         { account: buildAccountFilters(filters.q) },
       ],
+    });
+  }
+
+  if (filters.profession && filters.profession.length > 0) {
+    andFilters.push({
+      OR: filters.profession.map(prof => ({
+        profession: { equals: prof, mode: "insensitive" }
+      })),
     });
   }
 
@@ -63,6 +72,30 @@ export async function listProfessionalProfiles(filters: LawyerSearchFilters) {
   if (typeof filters.minRating === "number") {
     andFilters.push({
       rating: { gte: filters.minRating },
+    });
+  }
+
+  if (filters.acceptsNewClients === true) {
+    andFilters.push({
+      acceptsNewClients: true,
+    });
+  }
+
+  if (filters.offersRemote === true) {
+    andFilters.push({
+      offersRemote: true,
+    });
+  }
+
+  if (filters.offersInPerson === true) {
+    andFilters.push({
+      offersInPerson: true,
+    });
+  }
+
+  if (filters.verified === true) {
+    andFilters.push({
+      verified: true,
     });
   }
 
@@ -226,4 +259,13 @@ export async function listSpecializations() {
   });
 
   return Array.from(specializations).sort((a, b) => a.localeCompare(b));
+}
+
+export async function listProfessions() {
+  const profiles = await prisma.professionalProfile.findMany({
+    select: { profession: true },
+    distinct: ["profession"],
+  });
+
+  return profiles.map((p) => p.profession).sort((a, b) => a.localeCompare(b));
 }

@@ -11,6 +11,7 @@ import { ConsumerProfileSections } from "@/components/profile/consumer-profile-s
 import { ProfessionalProfileHeader } from "@/components/profile/professional-profile-header";
 import { ProfessionalProfileSections } from "@/components/profile/professional-profile-sections";
 import { ProfessionalProfileReviews } from "@/components/profile/professional-profile-reviews";
+import { ProfilePageContent } from "@/components/profile/profile-page-content";
 import { prisma } from "@/database/prisma";
 
 export const dynamic = "force-dynamic";
@@ -70,7 +71,7 @@ export default async function ProfilePage() {
     const followersCount = account?._count.friendOf || 0;
 
     return (
-      <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+      <ProfilePageContent>
         <ProfessionalProfileHeader 
           profile={professionalProfile} 
           isSelf={true}
@@ -85,7 +86,7 @@ export default async function ProfilePage() {
           totalReviews={professionalProfile.reviewCount}
           isSelf={true}
         />
-      </div>
+      </ProfilePageContent>
     );
   }
 
@@ -93,10 +94,10 @@ export default async function ProfilePage() {
 
   if (user.role === "CONSUMER" && consumerProfile) {
     return (
-      <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+      <ProfilePageContent>
         <ConsumerProfileHeader profile={consumerProfile} currentUserId={user.id} />
         <ConsumerProfileSections profile={consumerProfile} />
-      </div>
+      </ProfilePageContent>
     );
   }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Heart, 
   Clock, 
@@ -134,6 +135,11 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
   return (
     <div className="space-y-6">
       {/* Needs Help With Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+      >
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-xl">
@@ -177,9 +183,15 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
       {/* Tab Navigation */}
-      <div className="border-b border-slate-200 dark:border-slate-700">
+      <motion.div
+        className="border-b border-slate-200 dark:border-slate-700"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.4 }}
+      >
         <nav className="flex gap-8" aria-label="Profile sections">
           <button
             onClick={() => setActiveTab("saved")}
@@ -234,10 +246,15 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
             </div>
           </button>
         </nav>
-      </div>
+      </motion.div>
 
       {/* Tab Content */}
-      <div className="min-h-[400px]">
+      <motion.div
+        className="min-h-[400px]"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.5, ease: "easeOut" }}
+      >
         {activeTab === "saved" && (
           <SavedProfessionalsSection 
             professionals={savedProfessionals} 
@@ -266,7 +283,7 @@ export function ConsumerProfileSections({ profile }: ConsumerProfileSectionsProp
             isLoading={isLoading}
           />
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }
