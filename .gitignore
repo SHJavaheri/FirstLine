@@ -2,3 +2,4 @@
 *.md
 !**/README.md
 !docs/*.md
+!SETUP.md
