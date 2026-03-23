@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/database/prisma";
+import type { Prisma } from "@prisma/client";
 
 export type ActivityType = 
   | "viewed_professional"
@@ -22,7 +23,7 @@ export async function logActivity(
       accountId,
       activityType,
       relatedId,
-      metadata: metadata || null,
+      metadata: (metadata as Prisma.InputJsonValue) ?? undefined,
     },
   });
 }
