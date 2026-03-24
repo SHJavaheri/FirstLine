@@ -1,6 +1,12 @@
 name = "firstline"
+main = ".open-next/server.js"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 
-# Pages deployment is handled by @opennextjs/cloudflare
-# Environment variables are set in the Cloudflare dashboard
+# Workers deployment configuration
+[vars]
+NODE_ENV = "production"
+
+# Environment variables (set these in Cloudflare dashboard or via wrangler secret)
+# DATABASE_URL = "your-supabase-url"
+# JWT_SECRET = "your-jwt-secret"

@@ -9,7 +9,7 @@ export default {
       queue: "dummy",
     },
     buildCommand: "npm run build",
-    buildOutputPath: ".next",
+    buildOutputPath: ".open-next",
     dev: {
       port: 3000,
     },
